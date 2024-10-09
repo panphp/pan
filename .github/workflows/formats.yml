@@ -1,0 +1,49 @@
+name: Formats
+
+on: ['push', 'pull_request']
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest]
+        php: [8.3]
+        dependency-version: [prefer-lowest, prefer-stable]
+
+    name: Formats P${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        extensions: dom, mbstring, zip
+        coverage: pcov
+
+    - name: Get Composer cache directory
+      id: composer-cache
+      shell: bash
+      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: dependencies-php-${{ matrix.php }}-os-${{ matrix.os }}-version-${{ matrix.dependency-version }}-composer-${{ hashFiles('composer.json') }}
+        restore-keys: dependencies-php-${{ matrix.php }}-os-${{ matrix.os }}-version-${{ matrix.dependency-version }}-composer-
+
+    - name: Install Composer dependencies
+      run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
+
+    - name: Coding Style Checks
+      run: composer test:lint
+
+    - name: Type Checks
+      run: composer test:types
