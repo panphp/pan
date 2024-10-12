@@ -45,7 +45,7 @@ final class PanCommand extends Command
             ['', 'Name', 'Impressions', 'Hovers', 'Clicks'],
             array_map(fn (Analytic $analytic): array => [
                 '#'.$analytic->id,
-                (string) $analytic->name,
+                $analytic->name,
                 (string) $analytic->impressions,
                 $analytic->hovers.' ('.$this->toHumanReadablePercentage($analytic->hovers / $analytic->impressions * 100).')',
                 $analytic->clicks.' ('.$this->toHumanReadablePercentage($analytic->clicks / $analytic->impressions * 100).')',
