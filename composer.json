@@ -1,7 +1,14 @@
 {
     "name": "panphp/pan",
-    "description": "Simple Analytics for Laravel",
-    "keywords": ["pan", "php", "analytics", "laravel"],
+    "description": "An lil' PHP analytics library.",
+    "keywords": [
+        "pan",
+        "lil",
+        "php",
+        "analytics",
+        "library",
+        "laravel"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -13,16 +20,17 @@
         "php": "^8.3.0"
     },
     "require-dev": {
+        "orchestra/testbench": "^9.5.2",
         "laravel/pint": "^1.18.1",
-        "pestphp/pest": "^3.3.0",
+        "pestphp/pest": "^3.3.2",
         "pestphp/pest-plugin-type-coverage": "^3.1.0",
         "phpstan/phpstan": "^1.12.6",
-        "rector/rector": "^1.2.6",
+        "rector/rector": "^1.2.7",
         "symfony/var-dumper": "^7.1.5"
     },
     "autoload": {
         "psr-4": {
-            "PanPhp\\Pan\\": "src/"
+            "Pan\\": "src/"
         }
     },
     "autoload-dev": {
@@ -39,13 +47,20 @@
             "pestphp/pest-plugin": true
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Pan\\Adapters\\Laravel\\Providers\\PanServiceProvider"
+            ]
+        }
+    },
     "scripts": {
         "refacto": "rector",
         "lint": "pint",
         "test:refacto": "rector --dry-run",
         "test:lint": "pint --test",
         "test:types": "phpstan analyse --ansi",
-        "test:unit": "pest --colors=always --coverage --parallel --min=100",
+        "test:unit": "pest --colors=always --coverage --min=100",
         "test": [
             "@test:refacto",
             "@test:lint",

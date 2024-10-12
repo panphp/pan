@@ -1,0 +1,15 @@
+{
+    "private": true,
+    "scripts": {
+        "tsc": "tsc resources/js/src/*.ts",
+        "dev": "vite build --watch",
+        "build": "tsc resources/js/src/*.ts && vite build",
+        "lint": "prettier --write resources/js/src",
+        "test:lint": "prettier --check resources/js/src"
+    },
+    "devDependencies": {
+        "prettier": "^2.4.1",
+        "typescript": "^5.6.3",
+        "vite": "^5.4.8"
+    }
+}
