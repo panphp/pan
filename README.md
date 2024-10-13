@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/panphp/pan/main/docs/banner.png" height="300" alt="Skeleton Php">
+    <img src="https://raw.githubusercontent.com/panphp/pan/main/docs/banner.png" height="300" alt="Pan">
     <p align="center">
         <a href="https://github.com/panphp/pan/actions"><img alt="GitHub Workflow Status (main)" src="https://github.com/panphp/pan/actions/workflows/tests.yml/badge.svg"></a>
         <a href="https://packagist.org/packages/panphp/pan"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/panphp/pan"></a>
@@ -13,6 +13,10 @@
 **Pan is a lightweight and privacy-focused PHP analytics library**. It’s designed as a very simple package that you can install via `composer require` and start tracking your pages or components with **a simple `data-pan` attribute**.
 
 At the time of writing, Pan tracks only the following events: impressions, hovers, and clicks. It does not collect any personal information, such as IP addresses, user agents, or any data that could be used to identify a user.
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/panphp/pan/main/docs/banner-command.png" height="300" alt="Pan">
+</p>
 
 Using the `php artisan pan` command, you can visualize your analytics data and, hopefully, use this information to improve your application.
 
