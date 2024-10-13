@@ -38,15 +38,17 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
      */
     public function increment(string $name, EventType $event): void
     {
-        $query = DB::table('pan_analytics')->where('name', $name);
+        $query = DB::table('pan_analytics')->get();
 
-        if ($query->exists()) {
-            $query->increment($event->column());
+        if ($query->where('name', $name)->count() === 0) {
+            if ($query->count() < 50) {
+                DB::table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
+            }
 
             return;
         }
 
-        DB::table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
+        DB::table('pan_analytics')->where('name', $name)->increment($event->column());
     }
 
     /**

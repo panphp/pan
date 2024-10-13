@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Pan\Contracts\AnalyticsRepository;
 use Pan\ValueObjects\Analytic;
 
@@ -92,4 +93,37 @@ it('does not create an analytic event if the event is invalid', function (): voi
     $analytics = array_map(fn (Analytic $analytic): array => $analytic->toArray(), app(AnalyticsRepository::class)->all());
 
     expect($analytics)->toBe([]);
+});
+
+it('does handle gracefully when there is more than 50 analytics created', function (): void {
+    DB::table('pan_analytics')->insert(array_map(fn (int $index): array => [
+        'name' => "help-modal-$index",
+        'impressions' => 0,
+        'hovers' => 0,
+        'clicks' => 0,
+    ], range(1, 49)));
+
+    expect(DB::table('pan_analytics')->count())->toBe(49);
+
+    $response = $this->post('/pan/events', [
+        'events' => [[
+            'name' => 'help-modal',
+            'type' => 'click',
+        ]],
+    ]);
+
+    $response->assertStatus(204);
+
+    expect(DB::table('pan_analytics')->count())->toBe(50);
+
+    $response = $this->post('/pan/events', [
+        'events' => [[
+            'name' => 'help-modal',
+            'type' => 'click',
+        ]],
+    ]);
+
+    $response->assertStatus(204);
+
+    expect(DB::table('pan_analytics')->count())->toBe(50);
 });

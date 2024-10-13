@@ -56,6 +56,10 @@ Via middleware, Pan injects a simple JavaScript library into your HTML pages. Th
 
 On the server-side, Pan only stores: the analytic name, an a counter of how many times the different events were triggered. Via the `pan` Artisan command, you may visualize this data, and hopefully use this information to improve your application.
 
+### Considerations
+
+- By default, Pan only allows 50 or fewer analytics to be stored. This prevents any potential abuse of the system, as the analytics "name" are controlled on the client-side. (open to suggestions on how to improve this)
+
 ## License
 
 Pan is open-sourced software licensed under the [MIT license](LICENSE.md).
