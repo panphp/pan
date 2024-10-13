@@ -41,7 +41,7 @@ final readonly class InjectJavascriptLibrary
                             </script>
                         </body>
                         HTML,
-                        str_replace('%_PAN_CSRF_TOKEN_%', csrf_token(), File::get(__DIR__.'/../../../../../resources/js/dist/pan.iife.js')),
+                        str_replace('%_PAN_CSRF_TOKEN_%', (string) csrf_token(), File::get(__DIR__.'/../../../../../resources/js/dist/pan.iife.js')),
                     ),
                     (string) $response->getContent()
                 )

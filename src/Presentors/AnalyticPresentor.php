@@ -44,6 +44,6 @@ final class AnalyticPresentor
             return 'Infinity%';
         }
 
-        return number_format($part / $total * 100, 1) . '%';
+        return number_format($part / $total * 100, 1).'%';
     }
 }
