@@ -21,6 +21,13 @@ final class InstallPanCommand extends Command
     protected $signature = 'install:pan';
 
     /**
+     * The console command aliases.
+     *
+     * @var array<int, string>
+     */
+    protected $aliases = ['pan:install'];
+
+    /**
      * The console command description.
      *
      * @var string
