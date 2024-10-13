@@ -1,9 +1,8 @@
-/art               export-ignore
 /docs              export-ignore
 /tests             export-ignore
-/scripts           export-ignore
 /.github           export-ignore
 /.php_cs           export-ignore
+/resources/js/src  export-ignore
 .editorconfig      export-ignore
 .gitattributes     export-ignore
 .gitignore         export-ignore
@@ -13,3 +12,8 @@ rector.php         export-ignore
 CHANGELOG.md       export-ignore
 CONTRIBUTING.md    export-ignore
 README.md          export-ignore
+package.json       export-ignore
+package-lock.json  export-ignore
+tsconfig.json      export-ignore
+vite.config.js     export-ignore
+
