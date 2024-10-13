@@ -21,17 +21,29 @@ final class AnalyticPresentor
         return [
             'id' => '#'.$analytic->id,
             'name' => $analytic->name,
-            'impressions' => (string) $analytic->impressions,
-            'hovers' => $analytic->hovers.' ('.$this->toHumanReadablePercentage($analytic->hovers / $analytic->impressions * 100).')',
-            'clicks' => $analytic->clicks.' ('.$this->toHumanReadablePercentage($analytic->clicks / $analytic->impressions * 100).')',
+            'impressions' => $this->toHumanReadableNumber($analytic->impressions),
+            'hovers' => $this->toHumanReadableNumber($analytic->hovers).' ('.$this->toHumanReadablePercentage($analytic->impressions, $analytic->hovers).')',
+            'clicks' => $this->toHumanReadableNumber($analytic->clicks).' ('.$this->toHumanReadablePercentage($analytic->impressions, $analytic->clicks).')',
         ];
+    }
+
+    /**
+     * Returns a human-readable number.
+     */
+    private function toHumanReadableNumber(int $number): string
+    {
+        return number_format($number);
     }
 
     /**
      * Returns a human-readable percentage.
      */
-    private function toHumanReadablePercentage(float $percentage): string
+    private function toHumanReadablePercentage(int $total, int $part): string
     {
-        return number_format($percentage, 1).'%';
+        if ($total === 0) {
+            return 'Infinity%';
+        }
+
+        return number_format($part / $total * 100, 1) . '%';
     }
 }
