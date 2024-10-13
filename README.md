@@ -1,53 +1,61 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/nunomaduro/skeleton-php/master/docs/example.png" height="300" alt="Skeleton Php">
+    <img src="https://raw.githubusercontent.com/panphp/pan/main/docs/banner.png" height="300" alt="Skeleton Php">
     <p align="center">
-        <a href="https://github.com/nunomaduro/skeleton-php/actions"><img alt="GitHub Workflow Status (master)" src="https://github.com/nunomaduro/skeleton-php/actions/workflows/tests.yml/badge.svg"></a>
-        <a href="https://packagist.org/packages/nunomaduro/skeleton-php"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/nunomaduro/skeleton-php"></a>
-        <a href="https://packagist.org/packages/nunomaduro/skeleton-php"><img alt="Latest Version" src="https://img.shields.io/packagist/v/nunomaduro/skeleton-php"></a>
-        <a href="https://packagist.org/packages/nunomaduro/skeleton-php"><img alt="License" src="https://img.shields.io/packagist/l/nunomaduro/skeleton-php"></a>
+        <a href="https://github.com/panphp/pan/actions"><img alt="GitHub Workflow Status (main)" src="https://github.com/panphp/pan/actions/workflows/tests.yml/badge.svg"></a>
+        <a href="https://packagist.org/packages/panphp/pan"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/panphp/pan"></a>
+        <a href="https://packagist.org/packages/panphp/pan"><img alt="Latest Version" src="https://img.shields.io/packagist/v/panphp/pan"></a>
+        <a href="https://packagist.org/packages/panphp/pan"><img alt="License" src="https://img.shields.io/packagist/l/panphp/pan"></a>
     </p>
 </p>
 
 ---
 
-This package provides a wonderful **PHP Skeleton** to start building your next package idea.
+Pan is a lightweight and privacy-focused PHP analytics library. It is a simple and easy-to-use library that allows you to track your most "used" pages or components.
 
-> **Requires [PHP 8.2+](https://php.net/releases/)**
+## Get Started
 
-⚡️ Create your package using [Composer](https://getcomposer.org):
+> **Requires [PHP 8.3+](https://php.net/releases/)**, and [Laravel 11.0+](https://laravel.com).
 
-```bash
-composer create-project nunomaduro/skeleton-php --prefer-source PackageName
-```
-
-🧹 Keep a modern codebase with **Pint**:
+You may use [Composer](https://getcomposer.org) to require Pan into your PHP project:
 
 ```bash
-composer lint
+composer require panphp/pan
 ```
 
-✅ Run refactors using **Rector**
+After, you may install Pan into your Laravel project using the following command:
 
 ```bash
-composer refacto
+php artisan install:pan
 ```
 
-⚗️ Run static analysis using **PHPStan**:
+Finally, you may start tracking your pages or components adding the `data-pan` attribute to your HTML elements:
+
+```html
+<button data-pan="my-button">Click me</button>
+```
+
+## Visualize your analytics
+
+To visualize your analytics, you may use the `pan` Artisan command:
 
 ```bash
-composer test:types
+php artisan pan
 ```
 
-✅ Run unit tests using **PEST**
+## Flush your analytics
+
+To flush your analytics, you may use the `pan:flush` Artisan command:
 
 ```bash
-composer test:unit
+php artisan pan:flush
 ```
 
-🚀 Run the entire test suite:
+## How does it work?
 
-```bash
-composer test
-```
+Via middleware, Pan injects a simple JavaScript library into your HTML pages. This library listens to events like `viewed`, `clicked`, or `hovered` and sends the data to your Laravel application. Note that this library does not collect any personal information; such as IP addresses, user agents, or any information that could be used to identify a user.
 
-**Skeleton PHP** was created by **[Nuno Maduro](https://twitter.com/enunomaduro)** under the **[MIT license](https://opensource.org/licenses/MIT)**.
+On the server-side, Pan only stores: the analytic name, an a counter of how many times the different events were triggered. Via the `pan` Artisan command, you may visualize this data, and hopefully use this information to improve your application.
+
+## License
+
+Pan is open-sourced software licensed under the [MIT license](LICENSE.md).

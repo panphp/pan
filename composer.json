@@ -1,9 +1,8 @@
 {
     "name": "panphp/pan",
-    "description": "An lil' PHP analytics library.",
+    "description": "A lil’ PHP analytics library.",
     "keywords": [
         "pan",
-        "lil",
         "php",
         "analytics",
         "library",
