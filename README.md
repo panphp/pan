@@ -62,6 +62,8 @@ php artisan pan:flush
 
 Via middleware, Pan injects a simple JavaScript library into your HTML pages. This library listens to events like `viewed`, `clicked`, or `hovered` and sends the data to your Laravel application. Note that this library does not collect any personal information; such as IP addresses, user agents, or any information that could be used to identify a user.
 
+Also on the client-side, these events are collected in a very performant way and batched together to reduce the number of requests to your server.
+
 On the server-side, Pan only stores: the analytic name, an a counter of how many times the different events were triggered. Via the `pan` Artisan command, you may visualize this data, and hopefully use this information to improve your application.
 
 ### Considerations
