@@ -57,6 +57,6 @@ final class InstallPanCommand extends Command
             HTML,
         );
 
-        $this->components->info('Pan was installed successfully. Now you can track events by adding the [data-pan] attribute to your HTML elements. You can view analytics running the [artisan pan] command.');
+        $this->components->info('Pan was installed successfully. You may start collecting analytics by adding the [data-pan="my-button"] attribute to your HTML elements. You can view analytics by running the [artisan pan] command.');
     }
 }

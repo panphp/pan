@@ -22,7 +22,7 @@ final class CreateEventRequest extends FormRequest
     {
         return [
             'events' => ['required', 'array'],
-            'events.*.blueprint' => ['required', 'string', 'max:255'],
+            'events.*.name' => ['required', 'string', 'regex:/^[A-Za-z0-9-_]+$/'],
             'events.*.type' => ['required', Rule::enum(EventType::class)],
         ];
     }

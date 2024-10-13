@@ -17,7 +17,7 @@ final readonly class InjectJavascriptLibrary
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(Request): (Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -25,18 +25,23 @@ final readonly class InjectJavascriptLibrary
         $response = $next($request);
 
         if ($response->headers->get('Content-Type') === 'text/html; charset=UTF-8') {
+
+            $content = (string) $response->getContent();
+
+            if (! str_contains($content, '</html>') || ! str_contains($content, '</body>')) {
+                return $response;
+            }
+
             $response->setContent(
                 str_replace(
                     '</body>',
                     sprintf(<<<'HTML'
                             <script>
-                                let _PAN_CSRF_TOKEN = "%s";
                                 %s
                             </script>
                         </body>
                         HTML,
-                        csrf_token(),
-                        File::get(__DIR__.'/../../../../../resources/js/dist/pan.iife.js')
+                        str_replace('%_PAN_CSRF_TOKEN_%', csrf_token(), File::get(__DIR__.'/../../../../../resources/js/dist/pan.iife.js')),
                     ),
                     (string) $response->getContent()
                 )

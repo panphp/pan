@@ -7,6 +7,7 @@ namespace Pan\Adapters\Laravel\Console\Commands;
 use Illuminate\Console\Command;
 use Pan\Console\Table;
 use Pan\Contracts\AnalyticsRepository;
+use Pan\Presentors\AnalyticPresentor;
 use Pan\ValueObjects\Analytic;
 
 /**
@@ -31,33 +32,19 @@ final class PanCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(AnalyticsRepository $analytics): void
+    public function handle(AnalyticsRepository $analytics, AnalyticPresentor $presentor): void
     {
         $analytics = $analytics->all();
 
         if ($analytics === []) {
-            $this->components->info('No analytics have been recorded yet. Get started by adding the [data-pan] attribute to your HTML elements.');
+            $this->components->info('No analytics have been recorded yet. Get started collecting analytics by adding the [data-pan="my-button"] attribute to your HTML elements.');
 
             return;
         }
 
         (new Table($this->output))->display(
             ['', 'Name', 'Impressions', 'Hovers', 'Clicks'],
-            array_map(fn (Analytic $analytic): array => [
-                '#'.$analytic->id,
-                $analytic->name,
-                (string) $analytic->impressions,
-                $analytic->hovers.' ('.$this->toHumanReadablePercentage($analytic->hovers / $analytic->impressions * 100).')',
-                $analytic->clicks.' ('.$this->toHumanReadablePercentage($analytic->clicks / $analytic->impressions * 100).')',
-            ], $analytics)
+            array_map(fn (Analytic $analytic): array => array_values($presentor->present($analytic)), $analytics)
         );
-    }
-
-    /**
-     * Returns a human-readable percentage.
-     */
-    private function toHumanReadablePercentage(float $percentage): string
-    {
-        return number_format($percentage, 1).'%';
     }
 }

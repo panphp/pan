@@ -1,24 +1,54 @@
-function observeDom(callback) {
-    var observer = new MutationObserver(callback);
-    observer.observe(document.body, { childList: true, subtree: true });
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.window.__pan =
+    exports.window.__pan ||
+        {
+            csrfToken: "%_PAN_CSRF_TOKEN_%",
+            observer: null,
+            clickListener: null,
+            mouseoverListener: null,
+            inertiaStartListener: null,
+        };
+if (exports.window.__pan.observer) {
+    exports.window.__pan.observer.disconnect();
+    exports.window.__pan.observer = null;
+}
+if (exports.window.__pan.clickListener) {
+    document.removeEventListener("click", exports.window.__pan.clickListener);
+    exports.window.__pan.clickListener = null;
+}
+if (exports.window.__pan.mouseoverListener) {
+    document.removeEventListener("mouseover", exports.window.__pan.mouseoverListener);
+    exports.window.__pan.mouseoverListener = null;
+}
+if (exports.window.__pan.inertiaStartListener) {
+    document.removeEventListener("inertia:start", exports.window.__pan.inertiaStartListener);
+    exports.window.__pan.inertiaStartListener = null;
 }
 (function () {
+    var domObserver = function (callback) {
+        var observer = new MutationObserver(callback);
+        observer.observe(document.body, { childList: true, subtree: true });
+        exports.window.__pan.observer = observer;
+    };
     var queue = [];
     var queueTimeout = null;
-    var elementsAlreadyImpressed = [];
+    var impressed = [];
+    var hovered = [];
+    var clicked = [];
     var commit = function () {
         if (queue.length === 0) {
             return;
         }
         var onGoingQueue = queue.slice();
         queue = [];
-        navigator.sendBeacon('/pan/events', new Blob([
+        navigator.sendBeacon("/pan/events", new Blob([
             JSON.stringify({
                 events: onGoingQueue,
-                _token: _PAN_CSRF_TOKEN,
+                _token: exports.window.__pan.csrfToken,
             }),
         ], {
-            type: 'application/json',
+            type: "application/json",
         }));
     };
     var queueCommit = function () {
@@ -28,73 +58,79 @@ function observeDom(callback) {
     };
     var send = function (el, event) {
         var target = el.target;
-        var pan = target.closest('[data-pan]');
-        if (pan !== null) {
-            var blueprint = pan.getAttribute('data-pan');
-            if (blueprint === null) {
-                return;
-            }
-            queue.push({
-                type: event,
-                blueprint: blueprint,
-            });
-            queueCommit();
+        var element = target.closest("[data-pan]");
+        if (element === null) {
+            return;
         }
-    };
-    var detectImpressions = function () {
-        var elementsBeingImpressed = document.querySelectorAll('[data-pan]');
-        elementsBeingImpressed.forEach(function (element) {
-            var blueprint = element.getAttribute('data-pan');
-            if (blueprint === null) {
+        var name = element.getAttribute("data-pan");
+        if (name === null) {
+            return;
+        }
+        if (event === "hover") {
+            if (hovered.includes(name)) {
                 return;
             }
-            if (element.getBoundingClientRect().top < window.innerHeight) {
-                if (elementsAlreadyImpressed.includes(blueprint)) {
-                    return;
-                }
-                elementsAlreadyImpressed.push(blueprint);
-                queue.push({
-                    type: 'impression',
-                    blueprint: blueprint,
-                });
+            hovered.push(name);
+        }
+        if (event === "click") {
+            if (clicked.includes(name)) {
+                return;
             }
+            clicked.push(name);
+        }
+        queue.push({
+            type: event,
+            name: name,
         });
         queueCommit();
     };
-    document.addEventListener('DOMContentLoaded', function () {
-        observeDom(function () {
-            detectImpressions();
-            elementsAlreadyImpressed.forEach(function (blueprint) {
-                // check if element still exists in the DOM, if not, remove from elementsAlreadyImpressed
-                var element = document.querySelector("[data-pan=\"".concat(blueprint, "\"]"));
-                if (element === null) {
-                    elementsAlreadyImpressed = elementsAlreadyImpressed.filter(function (element) { return element !== blueprint; });
-                }
-            });
-        });
-        detectImpressions();
-        document.addEventListener('click', function (event) {
-            send(event, 'click');
-        });
-        document.addEventListener('mouseover', function (event) {
-            send(event, 'hover');
-        });
-        document.addEventListener('scroll', function (event) {
-            detectImpressions();
-        });
-        document.addEventListener('inertia:start', function (event) {
-            elementsAlreadyImpressed = [];
-        });
-        document.addEventListener('inertia:finish', function (event) {
-            //
-        });
-        window.addEventListener('beforeunload', function (event) {
-            if (queue.length === 0) {
+    var detectImpressions = function () {
+        var elementsBeingImpressed = document.querySelectorAll("[data-pan]");
+        elementsBeingImpressed.forEach(function (element) {
+            var name = element.getAttribute("data-pan");
+            if (name === null) {
                 return;
             }
-            event.preventDefault();
-            event.returnValue = '';
-            commit();
+            if (impressed.includes(name)) {
+                return;
+            }
+            impressed.push(name);
+            queue.push({
+                type: "impression",
+                name: name,
+            });
         });
+        queueCommit();
+    };
+    domObserver(function () {
+        impressed.forEach(function (name) {
+            var element = document.querySelector("[data-pan='".concat(name, "']"));
+            if (element === null) {
+                impressed = impressed.filter(function (n) { return n !== name; });
+                hovered = hovered.filter(function (n) { return n !== name; });
+                clicked = clicked.filter(function (n) { return n !== name; });
+            }
+        });
+        detectImpressions();
     });
+    exports.window.__pan.clickListener = function (event) { return send(event, "click"); };
+    document.addEventListener("click", exports.window.__pan.clickListener);
+    exports.window.__pan.mouseoverListener = function (event) {
+        return send(event, "hover");
+    };
+    document.addEventListener("mouseover", exports.window.__pan.mouseoverListener);
+    exports.window.__pan.inertiaStartListener = function (event) {
+        impressed = [];
+        hovered = [];
+        clicked = [];
+        detectImpressions();
+    };
+    document.addEventListener("inertia:start", exports.window.__pan.inertiaStartListener);
+    exports.window.__pan.beforeUnloadListener = function (event) {
+        if (queue.length === 0) {
+            return;
+        }
+        commit();
+    };
+    exports.window.addEventListener("beforeunload", exports.window.__pan.beforeUnloadListener);
 })();

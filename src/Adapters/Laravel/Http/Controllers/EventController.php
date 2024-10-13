@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Pan\Actions\CreateEvent;
 use Pan\Adapters\Laravel\Http\Requests\CreateEventRequest;
+use Pan\Enums\EventType;
 
 /**
  * @internal
@@ -19,10 +20,10 @@ final readonly class EventController
      */
     public function store(CreateEventRequest $request, CreateEvent $action): Response
     {
-        /** @var Collection<int, array{blueprint: string, type: string}> $events */
+        /** @var Collection<int, array{name: string, type: string}> $events */
         $events = $request->collect('events');
 
-        $events->each(fn (array $event) => $action->handle($event['blueprint'], $event['type']));
+        $events->each(fn (array $event) => $action->handle($event['name'], EventType::from($event['type'])));
 
         return response()->noContent();
     }

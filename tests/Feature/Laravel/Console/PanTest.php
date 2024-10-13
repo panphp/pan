@@ -8,7 +8,7 @@ it('displays analytics even if they are empty', function (): void {
     $response = $this->artisan('pan');
 
     $response
-        ->expectsOutputToContain('No analytics have been recorded yet. Get started by adding the [data-pan] attribute to your HTML elements.')
+        ->expectsOutputToContain('No analytics have been recorded yet. Get started collecting analytics by adding the [data-pan="my-button"] attribute to your HTML elements.')
         ->assertExitCode(0);
 });
 

@@ -1,37 +1,81 @@
-type EventType = 'click' | 'hover' | 'impression';
+import type { EventType, GlobalState } from "./types";
 
-declare const _PAN_CSRF_TOKEN: string;
+export declare const window: {
+    __pan: GlobalState;
+} & Window;
 
-function observeDom(callback: MutationCallback) {
-    const observer = new MutationObserver(callback);
+window.__pan =
+    window.__pan ||
+    ({
+        csrfToken: "%_PAN_CSRF_TOKEN_%",
+        observer: null,
+        clickListener: null,
+        mouseoverListener: null,
+        inertiaStartListener: null,
+    } as GlobalState);
 
-    observer.observe(document.body, { childList: true, subtree: true });
+if (window.__pan.observer) {
+    window.__pan.observer.disconnect();
+
+    window.__pan.observer = null;
 }
 
-(function () {
-    let queue: Array<{ type: EventType; blueprint: string }> = [];
-    let queueTimeout: number | null = null;
-    let elementsAlreadyImpressed: Array<string> = [];
+if (window.__pan.clickListener) {
+    document.removeEventListener("click", window.__pan.clickListener);
 
-    const commit = function (): void {
+    window.__pan.clickListener = null;
+}
+
+if (window.__pan.mouseoverListener) {
+    document.removeEventListener("mouseover", window.__pan.mouseoverListener);
+
+    window.__pan.mouseoverListener = null;
+}
+
+if (window.__pan.inertiaStartListener) {
+    document.removeEventListener(
+        "inertia:start",
+        window.__pan.inertiaStartListener
+    );
+
+    window.__pan.inertiaStartListener = null;
+}
+
+(function (): void {
+    const domObserver = (callback: MutationCallback): void => {
+        const observer = new MutationObserver(callback);
+
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        window.__pan.observer = observer;
+    };
+
+    let queue: Array<{ type: EventType; name: string }> = [];
+    let queueTimeout: number | null = null;
+    let impressed: Array<string> = [];
+    let hovered: Array<string> = [];
+    let clicked: Array<string> = [];
+
+    const commit = (): void => {
         if (queue.length === 0) {
             return;
         }
 
         const onGoingQueue = queue.slice();
+
         queue = [];
 
         navigator.sendBeacon(
-            '/pan/events',
+            "/pan/events",
             new Blob(
                 [
                     JSON.stringify({
                         events: onGoingQueue,
-                        _token: _PAN_CSRF_TOKEN,
+                        _token: window.__pan.csrfToken,
                     }),
                 ],
                 {
-                    type: 'application/json',
+                    type: "application/json",
                 }
             )
         );
@@ -42,101 +86,114 @@ function observeDom(callback: MutationCallback) {
 
         // @ts-ignore
         queueTimeout = setTimeout(commit, 1000);
-    }
-
-    const send = function (el: Event, event: EventType): void {
-        const target: HTMLElement = el.target as HTMLElement;
-        const pan: HTMLElement | null = target.closest('[data-pan]');
-
-        if (pan !== null) {
-            const blueprint: string|null = pan.getAttribute('data-pan');
-
-            if (blueprint === null) {
-                return;
-            }
-
-            queue.push({
-                type: event,
-                blueprint: blueprint,
-            });
-
-            queueCommit();
-        }
     };
 
-    const detectImpressions = function (): void {
-        const elementsBeingImpressed: NodeListOf<Element> = document.querySelectorAll('[data-pan]');
+    const send = function (el: Event, event: EventType): void {
+        const target = el.target as HTMLElement;
+        const element = target.closest("[data-pan]");
 
-        elementsBeingImpressed.forEach((element: Element) => {
-            const blueprint: string|null = element.getAttribute('data-pan');
+        if (element === null) {
+            return;
+        }
 
-            if (blueprint === null) {
+        const name = element.getAttribute("data-pan");
+
+        if (name === null) {
+            return;
+        }
+
+        if (event === "hover") {
+            if (hovered.includes(name)) {
                 return;
             }
 
-            if (element.getBoundingClientRect().top < window.innerHeight) {
+            hovered.push(name);
+        }
 
-                if (elementsAlreadyImpressed.includes(blueprint)) {
-                    return;
-                }
-
-                elementsAlreadyImpressed.push(blueprint);
-
-                queue.push({
-                    type: 'impression',
-                    blueprint: blueprint,
-                });
+        if (event === "click") {
+            if (clicked.includes(name)) {
+                return;
             }
+
+            clicked.push(name);
+        }
+
+        queue.push({
+            type: event,
+            name: name,
         });
 
         queueCommit();
     };
 
-    document.addEventListener('DOMContentLoaded', function () {
-        observeDom(function () {
-            detectImpressions();
+    const detectImpressions = function (): void {
+        const elementsBeingImpressed = document.querySelectorAll("[data-pan]");
 
-            elementsAlreadyImpressed.forEach((blueprint: string) => {
-                // check if element still exists in the DOM, if not, remove from elementsAlreadyImpressed
-                const element = document.querySelector(`[data-pan="${blueprint}"]`);
+        elementsBeingImpressed.forEach((element: Element): void => {
+            const name = element.getAttribute("data-pan");
 
-                if (element === null) {
-                    elementsAlreadyImpressed = elementsAlreadyImpressed.filter((element) => element !== blueprint);
-                }
-            });
-        });
-
-        detectImpressions();
-
-        document.addEventListener('click', function (event) {
-            send(event, 'click');
-        });
-
-        document.addEventListener('mouseover', function (event) {
-            send(event, 'hover');
-        });
-
-        document.addEventListener('scroll', function (event) {
-            detectImpressions();
-        });
-
-        document.addEventListener('inertia:start', (event) => {
-            elementsAlreadyImpressed = [];
-        });
-
-        document.addEventListener('inertia:finish', (event) => {
-            //
-        })
-
-        window.addEventListener('beforeunload', function (event) {
-            if (queue.length === 0) {
+            if (name === null) {
                 return;
             }
 
-            event.preventDefault();
-            event.returnValue = '';
+            if (impressed.includes(name)) {
+                return;
+            }
 
-            commit();
+            impressed.push(name);
+
+            queue.push({
+                type: "impression",
+                name: name,
+            });
         });
+
+        queueCommit();
+    };
+
+    domObserver(function (): void {
+        impressed.forEach((name: string): void => {
+            const element = document.querySelector(`[data-pan='${name}']`);
+
+            if (element === null) {
+                impressed = impressed.filter(
+                    (n: string): boolean => n !== name
+                );
+                hovered = hovered.filter((n: string): boolean => n !== name);
+                clicked = clicked.filter((n: string): boolean => n !== name);
+            }
+        });
+
+        detectImpressions();
     });
+
+    window.__pan.clickListener = (event: Event): void => send(event, "click");
+    document.addEventListener("click", window.__pan.clickListener);
+
+    window.__pan.mouseoverListener = (event: Event): void =>
+        send(event, "hover");
+    document.addEventListener("mouseover", window.__pan.mouseoverListener);
+
+    window.__pan.inertiaStartListener = (event: Event): void => {
+        impressed = [];
+        hovered = [];
+        clicked = [];
+
+        detectImpressions();
+    };
+
+    document.addEventListener(
+        "inertia:start",
+        window.__pan.inertiaStartListener
+    );
+
+    window.__pan.beforeUnloadListener = function (event: Event): void {
+        if (queue.length === 0) {
+            return;
+        }
+
+        commit();
+    };
+
+    window.addEventListener("beforeunload", window.__pan.beforeUnloadListener);
 })();
