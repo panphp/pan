@@ -13,6 +13,10 @@
         {
             "name": "Nuno Maduro",
             "email": "enunomaduro@gmail.com"
+        },
+        {
+            "name": "David Hill",
+            "email": "david@laravel.com"
         }
     ],
     "require": {
