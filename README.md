@@ -10,7 +10,7 @@
 
 ---
 
-**Pan is a lightweight and privacy-focused PHP analytics library**. It’s designed as a very simple package that you can install via `composer require` and start tracking your pages or components with **a simple `data-pan` attribute**.
+**Pan is a lightweight and privacy-focused PHP product analytics library**. It’s designed as a very simple package that you can install via `composer require` and start tracking your pages or components with **a simple `data-pan` attribute**.
 
 At the time of writing, Pan tracks only the following events: impressions, hovers, and clicks. It does not collect any personal information, such as IP addresses, user agents, or any data that could be used to identify a user.
 
@@ -55,17 +55,17 @@ Finally, you may start tracking your pages or components adding the `data-pan` a
 </div>
 ```
 
-## Visualize your analytics
+## Visualize your product analytics
 
-To visualize your analytics, you may use the `pan` Artisan command:
+To visualize your product analytics, you may use the `pan` Artisan command:
 
 ```bash
 php artisan pan
 ```
 
-## Flush your analytics
+## Flush your product analytics
 
-To flush your analytics, you may use the `pan:flush` Artisan command:
+To flush your product analytics, you may use the `pan:flush` Artisan command:
 
 ```bash
 php artisan pan:flush
