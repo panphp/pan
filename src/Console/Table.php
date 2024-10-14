@@ -36,7 +36,7 @@ final readonly class Table
         $table->setStyle('compact');
 
         $table->setHeaders(array_map(
-            fn ($header): string => "   <fg=cyan;options=bold>$header</>",
+            fn ($header): string => "   <fg=#FC6AFF;options=bold>$header</>",
             $headers
         ));
 
