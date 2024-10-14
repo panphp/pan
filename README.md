@@ -71,7 +71,7 @@ On the server-side, Pan only stores: the analytic name, an a counter of how many
 
 ### Considerations
 
-- By default, Pan only allows 50 or fewer analytics to be stored. This prevents any potential abuse of the system, as the analytics "name" are controlled on the client-side. (open to suggestions on how to improve this)
+- By default, Pan only allows 50 or fewer analytics to be stored. This prevents any potential abuse of the system, as the analytics "name" are controlled on the client-side. Open to suggestions on how to improve this.
 
 ## License
 
