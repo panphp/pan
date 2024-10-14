@@ -77,7 +77,7 @@ Via middleware, Pan injects a simple JavaScript library into your HTML pages. Th
 
 Also on the client-side, these events are collected in a very performant way and batched together to reduce the number of requests to your server.
 
-On the server-side, Pan only stores: the analytic name, an a counter of how many times the different events were triggered. Via the `pan` Artisan command, you may visualize this data, and hopefully use this information to improve your application.
+On the server-side, Pan only stores: the analytic name, and a counter of how many times the different events were triggered. Via the `pan` Artisan command, you may visualize this data, and hopefully use this information to improve your application.
 
 ### Considerations
 
