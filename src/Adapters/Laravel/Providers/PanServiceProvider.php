@@ -95,6 +95,6 @@ final class PanServiceProvider extends ServiceProvider
      */
     private function registerViews(): void
     {
-        $this->loadViewsFrom(base_path('vendor/panphp/pan/resources/views'), 'pan');
+        $this->loadViewsFrom(__DIR__.'/../../../../resources/views', 'pan');
     }
 }
