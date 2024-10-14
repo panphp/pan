@@ -10,7 +10,7 @@
 
 ---
 
-**Pan is a lightweight and privacy-focused PHP product analytics library**. It’s designed as a very simple package that you can install via `composer require` and start tracking your pages or components with **a simple `data-pan` attribute**.
+**Pan is a lightweight and privacy-focused PHP analytics library**. It’s designed as a very simple package that you can install via `composer require` and start tracking your pages or components with **a simple `data-pan` attribute**.
 
 At the time of writing, Pan tracks only the following events: impressions, hovers, and clicks. It does not collect any personal information, such as IP addresses, user agents, or any data that could be used to identify a user.
 
@@ -26,7 +26,7 @@ At the time of writing, Pan tracks only the following events: impressions, hover
 
 It works out-of-the-box with your favorite Laravel stack; updating a button color in your "react" won't trigger a new impression, but seeing that same button in a different [Inertia](https://inertiajs.com) page will. Using [Livewire](https://livewire.laravel.com)? No problem, Pan works seamlessly with it too.
 
-Visualize your product analytics is as simple as typing `php artisan pan` in your terminal. This command will show you a table with the different product analytics you've been tracking, and hopefully, you can use this information to improve your application.
+Visualize your analytics is as simple as typing `php artisan pan` in your terminal. This command will show you a table with the different analytics you've been tracking, and hopefully, you can use this information to improve your application.
 
 ## Get Started
 
@@ -57,7 +57,7 @@ Finally, you may start tracking your pages or components adding the `data-pan` a
 
 ## Visualize your analytics
 
-To visualize your product analytics, you may use the `pan` Artisan command:
+To visualize your analytics, you may use the `pan` Artisan command:
 
 ```bash
 php artisan pan
@@ -77,7 +77,7 @@ Via middleware, Pan injects a simple JavaScript library into your HTML pages. Th
 
 Also on the client-side, these events are collected in a very performant way and batched together to reduce the number of requests to your server.
 
-On the server-side, Pan only stores: the analytic name, an a counter of how many times the different events were triggered. Via the `pan` Artisan command, you may visualize this data, and hopefully use this information to improve your application.
+On the server-side, Pan only stores: the analytic name, and a counter of how many times the different events were triggered. Via the `pan` Artisan command, you may visualize this data, and hopefully use this information to improve your application.
 
 ### Considerations
 
