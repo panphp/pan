@@ -47,8 +47,12 @@ php artisan install:pan
 Finally, you may start tracking your pages or components adding the `data-pan` attribute to your HTML elements:
 
 ```diff
--<button>Register</button>
-+<button data-pan="register-button-on-pricing-page">Register</button>
+<div>
+-    <button>Tab 1</button>
++    <button data-pan="tab-1">Tab 1</button>
+-    <button>Tab 2</button>
++    <button data-pan="tab-2">Tab 2</button>
+</div>
 ```
 
 ## Visualize your analytics
