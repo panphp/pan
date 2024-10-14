@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/panphp/pan/main/docs/banner.png" height="300" alt="Pan">
+    <img src="https://raw.githubusercontent.com/panphp/pan/main/docs/banner.png" width="100%" alt="Pan">
     <p align="center">
         <a href="https://github.com/panphp/pan/actions"><img alt="GitHub Workflow Status (main)" src="https://github.com/panphp/pan/actions/workflows/tests.yml/badge.svg"></a>
         <a href="https://packagist.org/packages/panphp/pan"><img alt="Total Downloads" src="https://img.shields.io/packagist/dt/panphp/pan"></a>
