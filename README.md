@@ -24,7 +24,7 @@ That been said, using the `php artisan pan` command, you can visualize your anal
 
 ## Get Started
 
-> **Requires [PHP 8.3+](https://php.net/releases/)**, and [Laravel 11.0+](https://laravel.com).
+> **Requires [PHP 8.3+](https://php.net/releases/), and [Laravel 11.0+](https://laravel.com)**.
 
 You may use [Composer](https://getcomposer.org) to require Pan into your PHP project:
 
