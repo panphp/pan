@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Pan\Enums\EventType;
 
 return new class extends Migration
 {
@@ -16,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
 
-            collect(EventType::cases())->each(fn (EventType $case) => $table->unsignedBigInteger($case->column())->default(0));
+            $table->unsignedBigInteger('impressions')->default(0);
+            $table->unsignedBigInteger('hovers')->default(0);
+            $table->unsignedBigInteger('clicks')->default(0);
         });
     }
 
