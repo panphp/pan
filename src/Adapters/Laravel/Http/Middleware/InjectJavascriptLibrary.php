@@ -31,22 +31,36 @@ final readonly class InjectJavascriptLibrary
                 return $response;
             }
 
-            $response->setContent(
-                str_replace(
-                    '</body>',
-                    sprintf(<<<'HTML'
+            $this->inject($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Inject the JavaScript library into the response.
+     */
+    private function inject(Response $response): void
+    {
+        $original = $response->original ?? null;
+
+        $response->setContent(
+            str_replace(
+                '</body>',
+                sprintf(<<<'HTML'
                             <script>
                                 %s
                             </script>
                         </body>
                         HTML,
-                        str_replace('%_PAN_CSRF_TOKEN_%', (string) csrf_token(), File::get(__DIR__.'/../../../../../resources/js/dist/pan.iife.js')),
-                    ),
-                    $content,
-                )
-            );
-        }
+                    str_replace('%_PAN_CSRF_TOKEN_%', (string) csrf_token(), File::get(__DIR__.'/../../../../../resources/js/dist/pan.iife.js')),
+                ),
+                (string) $response->getContent(),
+            )
+        );
 
-        return $response;
+        if ($original !== null) {
+            $response->original = $original; // @phpstan-ignore-line
+        }
     }
 }
