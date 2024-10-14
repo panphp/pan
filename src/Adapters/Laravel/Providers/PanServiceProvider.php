@@ -11,6 +11,7 @@ use Pan\Adapters\Laravel\Console\Commands\InstallPanCommand;
 use Pan\Adapters\Laravel\Console\Commands\PanCommand;
 use Pan\Adapters\Laravel\Console\Commands\PanFlushCommand;
 use Pan\Adapters\Laravel\Http\Controllers\EventController;
+use Pan\Adapters\Laravel\Http\Controllers\PanController;
 use Pan\Adapters\Laravel\Http\Middleware\InjectJavascriptLibrary;
 use Pan\Adapters\Laravel\Repositories\DatabaseAnalyticsRepository;
 use Pan\Contracts\AnalyticsRepository;
@@ -36,6 +37,7 @@ final class PanServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->registerRoutes();
         $this->registerPublishing();
+        $this->registerViews();
     }
 
     /**
@@ -57,6 +59,7 @@ final class PanServiceProvider extends ServiceProvider
         $kernel->pushMiddleware(InjectJavascriptLibrary::class);
 
         Route::prefix('pan')->group(function (): void {
+            Route::get('/', [PanController::class, 'index']);
             Route::post('/events', [EventController::class, 'store']);
         });
     }
@@ -85,5 +88,13 @@ final class PanServiceProvider extends ServiceProvider
                 PanFlushCommand::class,
             ]);
         }
+    }
+
+    /**
+     * Register the package's views.
+     */
+    private function registerViews(): void
+    {
+        $this->loadViewsFrom(base_path('vendor/panphp/pan/resources/views'), 'pan');
     }
 }
