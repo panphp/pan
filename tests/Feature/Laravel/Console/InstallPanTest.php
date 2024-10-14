@@ -7,7 +7,7 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    $existingMigrations = glob(database_path('migrations/*_create_pan_tables.php')) ?? [];
+    $existingMigrations = glob(database_path('migrations/*_create_pan_analytics_table.php')) ?? [];
 
     foreach ($existingMigrations as $migration) {
         unlink($migration);
@@ -24,7 +24,7 @@ it('publishes the package migrations', function (): void {
         ->assertExitCode(0)
         ->run();
 
-    $existingMigration = glob(database_path('migrations/*_create_pan_tables.php'));
+    $existingMigration = glob(database_path('migrations/*_create_pan_analytics_table.php'));
 
     $this->assertTrue(is_array($existingMigration) && $existingMigration !== []);
 });
@@ -46,7 +46,7 @@ it('wont republish the package migrations', function (): void {
         ->assertExitCode(0)
         ->run();
 
-    $existingMigration = glob(database_path('migrations/*_create_pan_tables.php'));
+    $existingMigration = glob(database_path('migrations/*_create_pan_analytics_table.php'));
 
     $this->assertTrue(is_array($existingMigration) && count($existingMigration) === 1);
 });
@@ -61,7 +61,7 @@ it('does not run the migrations if the user declines', function (): void {
         ->assertExitCode(0)
         ->run();
 
-    $existingMigration = glob(database_path('migrations/*_create_pan_tables.php'));
+    $existingMigration = glob(database_path('migrations/*_create_pan_analytics_table.php'));
 
     $this->assertTrue(is_array($existingMigration) && $existingMigration !== []);
 });
