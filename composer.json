@@ -1,6 +1,6 @@
 {
     "name": "panphp/pan",
-    "description": "A lil’ PHP analytics library.",
+    "description": "A simple, lightweight, and privacy-focused product analytics php package.",
     "keywords": [
         "pan",
         "php",
