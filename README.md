@@ -24,9 +24,9 @@ At the time of writing, Pan tracks only the following events: impressions, hover
 - you have different "help" pop-hovers in your application, and you want to know **which one is the most hovered**. By adding the `data-pan` attribute to your pop-hovers, you can track this information.
 - and so on...
 
-It works out-of-the-box with your favorite Laravel stack; updating a button color in your "react" won't trigger a new impression, but seeing that same button in a different page will. Using LiveWire? No problem, Pan works seamlessly with it too.
+It works out-of-the-box with your favorite Laravel stack; updating a button color in your "react" won't trigger a new impression, but seeing that same button in a different [Inertia](https://inertiajs.com) page will. Using [Livewire](https://livewire.laravel.com)? No problem, Pan works seamlessly with it too.
 
-That been said, using the `php artisan pan` command, you can visualize your analytics data and, hopefully, use this information to improve your application.
+Visualize your analytics is as simple as typing `php artisan pan` in your terminal. This command will show you a table with the different analytics you've been tracking, and hopefully, you can use this information to improve your application.
 
 ## Get Started
 
