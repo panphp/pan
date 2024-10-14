@@ -18,7 +18,9 @@ At the time of writing, Pan tracks only the following events: impressions, hover
     <img src="https://raw.githubusercontent.com/panphp/pan/main/docs/banner-command.png" height="300" alt="Pan">
 </p>
 
-Using the `php artisan pan` command, you can visualize your analytics data and, hopefully, use this information to improve your application.
+It works out-of-the-box with your favorite Laravel stack; updating a button color in your "react" won't trigger a new impression, but seeing that same button in a different page will. Using LiveWire? No problem, Pan works seamlessly with it too.
+
+That been said, using the `php artisan pan` command, you can visualize your analytics data and, hopefully, use this information to improve your application.
 
 ## Get Started
 
