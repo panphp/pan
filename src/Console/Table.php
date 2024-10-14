@@ -42,7 +42,7 @@ final readonly class Table
 
         $table->setRows(array_map(
             fn ($row): array => array_map(
-                fn ($cell): string => "   <options=bold>$cell</>",
+                fn ($cell): string => "   $cell",
                 $row
             ),
             $rows

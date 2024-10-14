@@ -8,7 +8,9 @@ it('present an analytic', function (): void {
 
     $presentor = new AnalyticPresentor;
 
-    expect($presentor->present($analytic))->toBe([
+    $rows = array_map(fn ($value): string => strip_tags($value), $presentor->present($analytic));
+
+    expect($rows)->toBe([
         'id' => '#1',
         'name' => 'help-modal',
         'impressions' => '1',
@@ -22,7 +24,9 @@ it('present an analytic with 0 impressions', function (): void {
 
     $presentor = new AnalyticPresentor;
 
-    expect($presentor->present($analytic))->toBe([
+    $rows = array_map(fn ($value): string => strip_tags($value), $presentor->present($analytic));
+
+    expect($rows)->toBe([
         'id' => '#1',
         'name' => 'help-modal',
         'impressions' => '0',
@@ -36,7 +40,9 @@ it('present an analytic with 0 hovers', function (): void {
 
     $presentor = new AnalyticPresentor;
 
-    expect($presentor->present($analytic))->toBe([
+    $rows = array_map(fn ($value): string => strip_tags($value), $presentor->present($analytic));
+
+    expect($rows)->toBe([
         'id' => '#1',
         'name' => 'help-modal',
         'impressions' => '1',
@@ -50,7 +56,9 @@ it('present an analytic with 0 clicks', function (): void {
 
     $presentor = new AnalyticPresentor;
 
-    expect($presentor->present($analytic))->toBe([
+    $rows = array_map(fn ($value): string => strip_tags($value), $presentor->present($analytic));
+
+    expect($rows)->toBe([
         'id' => '#1',
         'name' => 'help-modal',
         'impressions' => '1',
@@ -64,7 +72,9 @@ it('presents huge numbers', function (): void {
 
     $presentor = new AnalyticPresentor;
 
-    expect($presentor->present($analytic))->toBe([
+    $rows = array_map(fn ($value): string => strip_tags($value), $presentor->present($analytic));
+
+    expect($rows)->toBe([
         'id' => '#1',
         'name' => 'help-modal',
         'impressions' => '1,000,000',
@@ -78,7 +88,9 @@ it('presents huge numbers with 0 impressions', function (): void {
 
     $presentor = new AnalyticPresentor;
 
-    expect($presentor->present($analytic))->toBe([
+    $rows = array_map(fn ($value): string => strip_tags($value), $presentor->present($analytic));
+
+    expect($rows)->toBe([
         'id' => '#1',
         'name' => 'help-modal',
         'impressions' => '0',
