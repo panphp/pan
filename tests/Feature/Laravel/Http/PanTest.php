@@ -1,9 +1,21 @@
 <?php
 
+function getPath(): string
+{
+    $basePath = '/pan';
+    $configPath = config('pan.ui.path', '/');
+
+    return $basePath.$configPath;
+}
+
 it('checks if the route is working', function (): void {
-    $this->get('/pan')->assertOk();
+    $path = getPath();
+
+    $this->get($path)->assertOk();
 });
 
 it('checks if the route generates the table', function (): void {
-    $this->get('/pan')->assertSee('#')->assertSee('Name')->assertSee('Impressions')->assertSee('Hovers')->assertSee('Clicks');
+    $path = getPath();
+
+    $this->get($path)->assertSee('#')->assertSee('Name')->assertSee('Impressions')->assertSee('Hovers')->assertSee('Clicks');
 });

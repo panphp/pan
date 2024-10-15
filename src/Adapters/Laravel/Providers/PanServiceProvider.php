@@ -59,7 +59,11 @@ final class PanServiceProvider extends ServiceProvider
         $kernel->pushMiddleware(InjectJavascriptLibrary::class);
 
         Route::prefix('pan')->group(function (): void {
-            Route::get('/', [PanController::class, 'index']);
+            if (config('pan.ui.enabled', true)) {
+                // @phpstan-ignore-next-line
+                Route::get(config('pan.ui.path', '/'), [PanController::class, 'index']);
+            }
+
             Route::post('/events', [EventController::class, 'store']);
         });
     }
@@ -73,6 +77,10 @@ final class PanServiceProvider extends ServiceProvider
             $this->publishesMigrations([
                 __DIR__.'/../../../../database/migrations' => database_path('migrations'),
             ], 'pan-migrations');
+
+            $this->publishes([
+                __DIR__.'/../../../../config/pan.php' => config_path('pan.php'),
+            ], 'pan-config');
         }
     }
 
