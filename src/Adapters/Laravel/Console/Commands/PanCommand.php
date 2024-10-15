@@ -43,7 +43,7 @@ final class PanCommand extends Command
         }
 
         (new Table($this->output))->display(
-            ['', 'Name', 'Impressions', 'Hovers', 'Clicks'],
+            $presentor->tableColumns(),
             array_map(fn (Analytic $analytic): array => array_values($presentor->present($analytic)), $analytics)
         );
     }

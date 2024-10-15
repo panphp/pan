@@ -46,4 +46,14 @@ final class AnalyticPresentor
 
         return number_format($part / $total * 100, 1).'%';
     }
+
+    /**
+     * Returns the columns for the table.
+     *
+     * @return array<string>
+     */
+    public function tableColumns(): array
+    {
+        return ['', 'Name', 'Impressions', 'Hovers', 'Clicks'];
+    }
 }

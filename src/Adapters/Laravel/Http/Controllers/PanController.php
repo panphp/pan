@@ -15,9 +15,9 @@ final class PanController
 {
     public function index(AnalyticsRepository $analytics, AnalyticPresentor $presenter): View|Factory|Application
     {
-        return view('pan::index')->with(
-            'analytics',
-            array_map(fn (Analytic $analytic): array => array_values($presenter->present($analytic)), $analytics->all())
-        );
+        return view('pan::index')->with([
+            'columns' => $presenter->tableColumns(),
+            'analytics' => array_map(fn (Analytic $analytic): array => array_values($presenter->present($analytic)), $analytics->all()),
+        ]);
     }
 }
