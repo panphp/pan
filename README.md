@@ -55,6 +55,16 @@ Finally, you may start tracking your pages or components adding the `data-pan` a
 </div>
 ```
 
+## Configuration
+
+You may publish the Pan configuration file using the following Artisan command:
+
+```bash
+php artisan vendor:publish --tag=pan-config
+```
+
+This will create a `pan.php` file in your `config` directory.
+
 ## Visualize your product analytics
 
 To visualize your product analytics, you may use the `pan` Artisan command:
