@@ -28,4 +28,9 @@ interface AnalyticsRepository
      * Flush all analytics.
      */
     public function flush(): void;
+
+    /**
+     * Delete a specific analytic by ID.
+     */
+    public function delete(int $id): void;
 }

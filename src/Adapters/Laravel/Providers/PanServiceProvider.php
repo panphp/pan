@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Pan\Adapters\Laravel\Console\Commands\InstallPanCommand;
 use Pan\Adapters\Laravel\Console\Commands\PanCommand;
+use Pan\Adapters\Laravel\Console\Commands\PanDeleteCommand;
 use Pan\Adapters\Laravel\Console\Commands\PanFlushCommand;
 use Pan\Adapters\Laravel\Http\Controllers\EventController;
 use Pan\Adapters\Laravel\Http\Middleware\InjectJavascriptLibrary;
@@ -83,6 +84,7 @@ final class PanServiceProvider extends ServiceProvider
                 InstallPanCommand::class,
                 PanCommand::class,
                 PanFlushCommand::class,
+                PanDeleteCommand::class,
             ]);
         }
     }
