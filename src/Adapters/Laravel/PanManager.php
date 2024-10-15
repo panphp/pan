@@ -13,6 +13,8 @@ final class PanManager
      */
     private array $allowed;
 
+    private int $perMinute;
+
     public function __construct()
     {
         /** @phpstan-ignore cast.int */
@@ -23,6 +25,9 @@ final class PanManager
             /** @phpstan-ignore cast.string */
             explode(',', (string) env('PAN_ALLOWED', '')),
         ));
+
+        /** @phpstan-ignore cast.int */
+        $this->perMinute = (int) env('PAN_PER_MINUTE', 150);
     }
 
     public function max(?int $value = null): int|self
@@ -54,6 +59,17 @@ final class PanManager
         }
 
         $this->allowed = $value;
+
+        return $this;
+    }
+
+    public function perMinute(?int $value = null): int|self
+    {
+        if (is_null($value)) {
+            return $this->perMinute;
+        }
+
+        $this->perMinute = $value;
 
         return $this;
     }

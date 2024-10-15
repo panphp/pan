@@ -147,6 +147,12 @@ it('allows overriding allowed', function (): void {
     expect(Pan::allowed())->toEqual(['test']);
 });
 
+it('allows overriding perMinute', function (): void {
+    Pan::perMinute(123);
+
+    expect(Pan::perMinute())->toEqual(123);
+});
+
 it('allows a configurable number of analytics events created', function (): void {
     putenv('PAN_MAX=100');
 
@@ -219,4 +225,32 @@ it('does handle gracefully when there disallowed analytics created', function ()
     expect(DB::table('pan_analytics')->count())->toBe(2);
 
     putenv('PAN_ALLOWED');
+});
+
+it('does handle gracefully when there are too many requests per minute', function (): void {
+    putenv('PAN_PER_MINUTE=1');
+
+    $response = $this->post('/pan/events', [
+        'events' => [[
+            'name' => 'help-modal',
+            'type' => 'click',
+        ]],
+    ]);
+
+    $response->assertStatus(204);
+
+    expect(DB::table('pan_analytics')->count())->toBe(1);
+
+    $response = $this->post('/pan/events', [
+        'events' => [[
+            'name' => 'help-modal',
+            'type' => 'click',
+        ]],
+    ]);
+
+    $response->assertStatus(204);
+
+    expect(DB::table('pan_analytics')->count())->toBe(1);
+
+    putenv('PAN_PER_MINUTE');
 });
