@@ -73,6 +73,11 @@ To visualize your product analytics, you may use the `pan` Artisan command:
 php artisan pan
 ```
 
+## Visualize your product analytics in UI
+
+To visualize your product analytics in a UI, you may visit the `/pan` route in your browser.
+
+
 ## Flush your product analytics
 
 To flush your product analytics, you may use the `pan:flush` Artisan command:

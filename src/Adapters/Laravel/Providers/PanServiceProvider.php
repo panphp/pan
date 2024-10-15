@@ -61,7 +61,7 @@ final class PanServiceProvider extends ServiceProvider
         Route::prefix('pan')->group(function (): void {
             if (config('pan.ui.enabled', true)) {
                 // @phpstan-ignore-next-line
-                Route::get(config('pan.ui.path', '/'), [PanController::class, 'index']);
+                Route::get(config('pan.ui.path', '/'), [PanController::class, 'index'])->middleware(config('pan.ui.path_middlewares', []));
             }
 
             Route::post('/events', [EventController::class, 'store']);
