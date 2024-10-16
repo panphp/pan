@@ -139,7 +139,7 @@ if (window.__pan.inertiaStartListener) {
 
             let nameElements = document.querySelectorAll(`[data-pan='${name}']`);
             if (nameElements.length > 1 && !sameNameElements.includes(name)) {
-                console.warn('PAN: Multiple elements with the same name detected: ', name);
+                console.warn(`PAN: Multiple (${nameElements.length}) elements with the same name '${name}' found`);
                 sameNameElements.push(name);
             }
 
