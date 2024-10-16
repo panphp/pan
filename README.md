@@ -68,7 +68,9 @@ php artisan pan --filter=tab-profile
 
 ## Whitelist your product analytics
 
-By default, Pan tracks all the HTML elements with the `data-pan` attribute, so bad actors could alter your HTML and create unwanted analytics records in your database. To prevent this, you may use the `PanConfiguration::allowedAnalytics` method in your `Providers/AppServiceProvider.php`:
+By default, Pan tracks all the HTML elements with the `data-pan` attribute, so bad actors could alter your HTML and create unwanted analytics records in your database. To mitigate this, by default, Pan only allows 50 analytics records to be created.
+
+For extra protection, you may use the `PanConfiguration::allowedAnalytics` method to whitelist the analytics you want to track. This way, only the analytics you've whitelisted will be stored in your database.
 
 ```php
 use Pan\PanConfiguration;
