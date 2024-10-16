@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://www.youtube.com/watch?v=hJJNi-Ri_3E">
+    <a href="https://www.youtube.com/watch?v=hJJNi-Ri_3E" target="_blank">
         <img src="https://raw.githubusercontent.com/panphp/pan/main/docs/banner-video.png" width="100%" alt="Pan">
     </a>
     <p align="center">
