@@ -12,6 +12,7 @@ use Pan\Adapters\Laravel\Console\Commands\PanCommand;
 use Pan\Adapters\Laravel\Console\Commands\PanFlushCommand;
 use Pan\Adapters\Laravel\Http\Controllers\EventController;
 use Pan\Adapters\Laravel\Http\Middleware\InjectJavascriptLibrary;
+use Pan\Adapters\Laravel\PanManager;
 use Pan\Adapters\Laravel\Repositories\DatabaseAnalyticsRepository;
 use Pan\Contracts\AnalyticsRepository;
 
@@ -26,6 +27,7 @@ final class PanServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerRepositories();
+        $this->registerManager();
     }
 
     /**
@@ -36,6 +38,14 @@ final class PanServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->registerRoutes();
         $this->registerPublishing();
+    }
+
+    /**
+     * Register the pan manager to track state.
+     */
+    private function registerManager(): void
+    {
+        $this->app->bind('pan', PanManager::class);
     }
 
     /**

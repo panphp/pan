@@ -73,6 +73,44 @@ To flush your product analytics, you may use the `pan:flush` Artisan command:
 php artisan pan:flush
 ```
 
+## Configuration methods
+
+You can change various settings with configuration methods, inside your service provider or `.env` file:
+
+```ini
+# maximum number of event types
+PAN_MAX=100
+
+# allow-list of event types
+PAN_ALLOWED=help-modal,help-indicator
+
+# maximum number of events per minute, per IP address
+PAN_PER_MINUTE=300
+```
+
+```php
+class AppProvider extends ServiceProvider
+{
+    /**
+     * Register any package services.
+     */
+    public function register(): void
+    {
+        \Pan\Adapters\Laravel\Pan::max(100);
+        \Pan\Adapters\Laravel\Pan::unlimited();
+        \Pan\Adapters\Laravel\Pan::allowed(['help-modal', 'help-indicator']);
+        \Pan\Adapters\Laravel\Pan::perMinute(300);
+
+        // ...or
+
+        app('pan')->max(100);
+        app('pan')->unlimited();
+        app('pan')->allowed(['help-modal', 'help-indicator']);
+        app('pan')->perMinute(300);
+    }
+}
+```
+
 ## How does it work?
 
 Via middleware, Pan injects a simple JavaScript library into your HTML pages. This library listens to events like `viewed`, `clicked`, or `hovered` and sends the data to your Laravel application. Note that this library does not collect any personal information; such as IP addresses, user agents, or any information that could be used to identify a user.
@@ -83,7 +121,8 @@ On the server-side, Pan only stores: the analytic name, and a counter of how man
 
 ### Considerations
 
-- By default, Pan only allows 50 or fewer analytics to be stored. This prevents any potential abuse of the system, as the analytics "name" are controlled on the client-side. Open to suggestions on how to improve this.
+- By default, Pan only allows 50 or fewer analytics to be stored. This prevents any potential abuse of the system, as the analytics "name" are controlled on the client-side. This can be adjusted or disabled completely via config methods.
+- By default, Pan only allows 150 requests per minute, per IP address. This prevents query flooding without the need for setting up custom global rate limiting.
 
 ## License
 

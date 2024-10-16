@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Pan\Adapters\Laravel\Http\Controllers;
 
+use Illuminate\Cache\RateLimiter;
+use Illuminate\Container\Container;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Pan\Actions\CreateEvent;
 use Pan\Adapters\Laravel\Http\Requests\CreateEventRequest;
+use Pan\Adapters\Laravel\PanManager;
 use Pan\Enums\EventType;
 
 /**
@@ -20,10 +23,25 @@ final readonly class EventController
      */
     public function store(CreateEventRequest $request, CreateEvent $action): Response
     {
-        /** @var Collection<int, array{name: string, type: string}> $events */
-        $events = $request->collect('events');
+        /** @var RateLimiter $limiter */
+        $limiter = Container::getInstance()->get(RateLimiter::class);
 
-        $events->each(fn (array $event) => $action->handle($event['name'], EventType::from($event['type'])));
+        /** @var PanManager $manager */
+        $manager = Container::getInstance()->get('pan');
+
+        $limiter->attempt(
+            'pan:'.$request->ip(),
+            /** @phpstan-ignore argument.type */
+            maxAttempts: $manager->perMinute(),
+            callback: function () use ($request, $action): void {
+                /** @var Collection<int, array{name: string, type: string}> $events */
+                $events = $request->collect('events');
+
+                $events->each(
+                    fn (array $event) => $action->handle($event['name'], EventType::from($event['type']))
+                );
+            }
+        );
 
         return response()->noContent();
     }
