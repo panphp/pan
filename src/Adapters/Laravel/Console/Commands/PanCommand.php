@@ -36,8 +36,8 @@ final class PanCommand extends Command
     {
         $analytics = $analytics->all();
 
-        if ($filter = $this->option('filter')) {
-            $analytics = array_filter($analytics, fn (Analytic $analytic): bool => $analytic->name === $filter);
+        if (is_string($filter = $this->option('filter'))) {
+            $analytics = array_filter($analytics, fn (Analytic $analytic): bool => str_contains($analytic->name, $filter));
         }
 
         if ($analytics === []) {
