@@ -7,6 +7,7 @@ namespace Pan\Adapters\Laravel\Repositories;
 use Illuminate\Support\Facades\DB;
 use Pan\Contracts\AnalyticsRepository;
 use Pan\Enums\EventType;
+use Pan\PanConfiguration;
 use Pan\ValueObjects\Analytic;
 
 /**
@@ -14,6 +15,14 @@ use Pan\ValueObjects\Analytic;
  */
 final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
 {
+    /**
+     * Creates a new analytics repository instance.
+     */
+    public function __construct(private PanConfiguration $config)
+    {
+        //
+    }
+
     /**
      * Returns all analytics.
      *
@@ -38,10 +47,17 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
      */
     public function increment(string $name, EventType $event): void
     {
-        $query = DB::table('pan_analytics')->get();
+        [
+            'allowed_analytics' => $allowedAnalytics,
+            'max_analytics' => $maxAnalytics,
+        ] = $this->config->toArray();
 
-        if ($query->where('name', $name)->count() === 0) {
-            if ($query->count() < 50) {
+        if (count($allowedAnalytics) > 0 && ! in_array($name, $allowedAnalytics, true)) {
+            return;
+        }
+
+        if (DB::table('pan_analytics')->where('name', $name)->count() === 0) {
+            if (DB::table('pan_analytics')->count() < $maxAnalytics) {
                 DB::table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
             }
 

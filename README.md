@@ -63,6 +63,35 @@ To visualize your product analytics, you may use the `pan` Artisan command:
 
 ```bash
 php artisan pan
+php artisan pan --filter=tab-profile
+```
+
+## Whitelist your product analytics
+
+By default, Pan tracks all the HTML elements with the `data-pan` attribute, so bad actors could alter your HTML and create unwanted analytics records in your database. To prevent this, you may use the `PanConfiguration::allowedAnalytics` method in your `Providers/AppServiceProvider.php`:
+
+```php
+use Pan\PanConfiguration;
+
+public function register(): void
+{
+    PanConfiguration::allowedAnalytics(
+        'tab-profile',
+        'tab-settings',
+    ]);
+}
+```
+
+Alternatively, if you want to allow dynamic analytics, you may use the `PanConfiguration::maxAnalytics` method and this way at least limit the number of analytics records created:
+
+```php
+PanConfiguration::maxAnalytics(10000);
+```
+
+Finally, if you want to have unlimited analytics records, you may use the `Pan::unlimitedAnalytics` method:
+
+```php
+PanConfiguration::unlimitedAnalytics();
 ```
 
 ## Flush your product analytics
@@ -80,10 +109,6 @@ Via middleware, Pan injects a simple JavaScript library into your HTML pages. Th
 Also on the client-side, these events are collected in a very performant way and batched together to reduce the number of requests to your server.
 
 On the server-side, Pan only stores: the analytic name, and a counter of how many times the different events were triggered. Via the `pan` Artisan command, you may visualize this data, and hopefully use this information to improve your application.
-
-### Considerations
-
-- By default, Pan only allows 50 or fewer analytics to be stored. This prevents any potential abuse of the system, as the analytics "name" are controlled on the client-side. Open to suggestions on how to improve this.
 
 ## License
 

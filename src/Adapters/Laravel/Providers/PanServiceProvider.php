@@ -14,6 +14,7 @@ use Pan\Adapters\Laravel\Http\Controllers\EventController;
 use Pan\Adapters\Laravel\Http\Middleware\InjectJavascriptLibrary;
 use Pan\Adapters\Laravel\Repositories\DatabaseAnalyticsRepository;
 use Pan\Contracts\AnalyticsRepository;
+use Pan\PanConfiguration;
 
 /**
  * @internal
@@ -25,6 +26,7 @@ final class PanServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->registerConfiguration();
         $this->registerRepositories();
     }
 
@@ -36,6 +38,14 @@ final class PanServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->registerRoutes();
         $this->registerPublishing();
+    }
+
+    /**
+     * Register the package configuration.
+     */
+    private function registerConfiguration(): void
+    {
+        $this->app->bind(PanConfiguration::class, fn (): \Pan\PanConfiguration => PanConfiguration::instance());
     }
 
     /**
