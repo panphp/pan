@@ -75,7 +75,7 @@ use Pan\PanConfiguration;
 
 public function register(): void
 {
-    PanConfiguration::allowedAnalytics(
+    PanConfiguration::allowedAnalytics([
         'tab-profile',
         'tab-settings',
     ]);
