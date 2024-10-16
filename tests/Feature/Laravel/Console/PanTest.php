@@ -28,3 +28,23 @@ it('displays all analytics', function (): void {
 
     expect($exitCode)->toBe(0);
 });
+
+it ('displays filtered analytics', function (): void {
+    $analytics = app(AnalyticsRepository::class);
+
+    $analytics->increment('dashboard', EventType::IMPRESSION);
+    $analytics->increment('dashboard', EventType::IMPRESSION);
+    $analytics->increment('dashboard', EventType::IMPRESSION);
+
+    $analytics->increment('dashboard', EventType::HOVER);
+    $analytics->increment('dashboard', EventType::HOVER);
+
+    $analytics->increment('dashboard', EventType::CLICK);
+
+    $analytics->increment('profile', EventType::IMPRESSION);
+    $analytics->increment('profile', EventType::IMPRESSION);
+
+    $exitCode = Artisan::call('pan --filter=profile');
+
+    expect($exitCode)->toBe(0);
+});

@@ -20,7 +20,7 @@ final class PanCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'pan';
+    protected $signature = 'pan {--filter= : Filter the analytics by name}';
 
     /**
      * The console command description.
@@ -35,6 +35,10 @@ final class PanCommand extends Command
     public function handle(AnalyticsRepository $analytics, AnalyticPresentor $presentor): void
     {
         $analytics = $analytics->all();
+
+        if ($filter = $this->option('filter')) {
+            $analytics = array_filter($analytics, fn (Analytic $analytic): bool => $analytic->name === $filter);
+        }
 
         if ($analytics === []) {
             $this->components->info('No analytics have been recorded yet. Get started collecting analytics by adding the [data-pan="my-button"] attribute to your HTML elements.');
