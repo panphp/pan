@@ -6,5 +6,5 @@ use Pan\PanConfiguration;
 pest()
     ->extend(Tests\TestCase::class)
     ->use(RefreshDatabase::class)
-    ->beforeEach(fn (): \Pan\PanConfiguration => PanConfiguration::reset())
+    ->beforeEach(fn () => PanConfiguration::reset())
     ->in('Feature', 'Unit');

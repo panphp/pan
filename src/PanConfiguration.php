@@ -6,10 +6,6 @@ namespace Pan;
 
 /**
  * @internal
- *
- * @method self maxAnalytics(int $number)
- * @method self unlimitedAnalytics()
- * @method self allowedAnalytics(array $names)
  */
 final class PanConfiguration
 {
@@ -20,6 +16,8 @@ final class PanConfiguration
 
     /**
      * Creates a new Pan configuration instance.
+     *
+     * @param  array<int, string>  $allowedAnalytics
      */
     private function __construct(
         private int $maxAnalytics = 50,
@@ -40,20 +38,32 @@ final class PanConfiguration
 
     /**
      * Sets the maximum number of analytics to store.
-     */
-    public static function maxAnalytics(int $number): void
-    {
-        self::instance()->setMaxAnalytics($number);
-    }
-
-    /**
-     * Sets the maximum number of analytics to store.
      *
      * @internal
      */
     public function setMaxAnalytics(int $number): void
     {
         $this->maxAnalytics = $number;
+    }
+
+    /**
+     * Sets the allowed analytics names to store.
+     *
+     * @param  array<int, string>  $names
+     *
+     * @internal
+     */
+    public function setAllowedAnalytics(array $names): void
+    {
+        $this->allowedAnalytics = $names;
+    }
+
+    /**
+     * Sets the maximum number of analytics to store.
+     */
+    public static function maxAnalytics(int $number): void
+    {
+        self::instance()->setMaxAnalytics($number);
     }
 
     /**
@@ -75,42 +85,22 @@ final class PanConfiguration
     }
 
     /**
-     * Sets the allowed analytics names to store.
-     *
-     * @param  array<int, string>  $names
-     *
-     * @internal
-     */
-    public function setAllowedAnalytics(array $names): void
-    {
-        $this->allowedAnalytics = $names;
-    }
-
-    /**
      * Resets the configuration to its default values.
      *
      * @internal
      */
-    public static function reset(): self
+    public static function reset(): void
     {
-        self::instance()->setMaxAnalytics(50);
-        self::instance()->setAllowedAnalytics([]);
-
-        return self::instance();
-    }
-
-    /**
-     * Proxies static calls to the instance.
-     */
-    public function __call(string $name, array $arguments): self
-    {
-        return self::instance()::$name(...$arguments);
+        self::maxAnalytics(50);
+        self::allowedAnalytics([]);
     }
 
     /**
      * Converts the Pan configuration to an array.
      *
-     * @return array{max: int, allowed_names: array<int, string>}
+     * @return array{max_analytics: int, allowed_analytics: array<int, string>}
+     *
+     * @internal
      */
     public function toArray(): array
     {
