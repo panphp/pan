@@ -15,7 +15,9 @@
 At the time of writing, Pan tracks only the following events: impressions, hovers, and clicks. It does not collect any personal information, such as IP addresses, user agents, or any data that could be used to identify a user.
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/panphp/pan/main/docs/banner-command-with-background.png" width="100%" alt="Pan">
+    <a href="https://www.youtube.com/watch?v=hJJNi-Ri_3E">
+        <img src="https://raw.githubusercontent.com/panphp/pan/main/docs/banner-video.png" width="100%" alt="Pan">
+    </a>
 </p>
 
 **Use cases:**
