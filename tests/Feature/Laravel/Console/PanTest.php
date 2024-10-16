@@ -29,7 +29,7 @@ it('displays all analytics', function (): void {
     expect($exitCode)->toBe(0);
 });
 
-it ('displays filtered analytics', function (): void {
+it('displays filtered analytics', function (): void {
     $analytics = app(AnalyticsRepository::class);
 
     $analytics->increment('dashboard', EventType::IMPRESSION);
