@@ -135,8 +135,6 @@ if (window.__pan.inertiaStartListener) {
 
         elementsBeingImpressed.forEach((element: Element): void => {
             if (! element.checkVisibility()) {
-
-
                 return;
             }
 
