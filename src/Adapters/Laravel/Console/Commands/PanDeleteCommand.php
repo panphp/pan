@@ -21,7 +21,7 @@ class PanDeleteCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Delete analytics by ID or all at once';
+    protected $description = 'Delete analytics by ID.';
 
     /**
      * Execute the console command.
