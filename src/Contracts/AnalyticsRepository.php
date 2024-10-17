@@ -32,5 +32,5 @@ interface AnalyticsRepository
     /**
      * Delete a specific analytic by ID.
      */
-    public function delete(int $id): void;
+    public function delete(int $id): string;
 }
