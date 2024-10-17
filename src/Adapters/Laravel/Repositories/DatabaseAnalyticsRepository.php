@@ -74,4 +74,12 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     {
         DB::table('pan_analytics')->truncate();
     }
+
+    /**
+     * Delete a specific analytic by ID.
+     */
+    public function delete(int $id): int
+    {
+        return DB::table('pan_analytics')->where('id', $id)->delete();
+    }
 }
