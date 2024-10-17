@@ -14,7 +14,7 @@ class PanDeleteCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'pan:delete {--id= : The ID of the analytic to delete}';
+    protected $signature = 'pan:delete {id : The ID of the analytic to delete}';
 
     /**
      * The console command description.
@@ -28,13 +28,13 @@ class PanDeleteCommand extends Command
      */
     public function handle(AnalyticsRepository $repository): void
     {
-        $id = $this->option('id');
+        $id = (int) $this->argument('id');
 
-        if (! $id) {
-            $this->error('Please specify --id=');
+        if ($id > 0) {
+            $repository->delete($id);
+            $this->info('Analytic has been deleted.');
         }
 
-        $repository->delete((int) $id);
-        $this->info('Analytic has been deleted.');
+        $this->error('The ID must be a positive integer.');
     }
 }
