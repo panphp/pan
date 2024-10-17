@@ -28,7 +28,11 @@ if (exports.window.__pan.inertiaStartListener) {
 (function () {
     var domObserver = function (callback) {
         var observer = new MutationObserver(callback);
-        observer.observe(document.body, { childList: true, subtree: true });
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+        });
         exports.window.__pan.observer = observer;
     };
     var queue = [];
@@ -87,6 +91,9 @@ if (exports.window.__pan.inertiaStartListener) {
     var detectImpressions = function () {
         var elementsBeingImpressed = document.querySelectorAll("[data-pan]");
         elementsBeingImpressed.forEach(function (element) {
+            if (!element.checkVisibility()) {
+                return;
+            }
             var name = element.getAttribute("data-pan");
             if (name === null) {
                 return;

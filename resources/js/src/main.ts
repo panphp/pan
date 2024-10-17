@@ -45,7 +45,11 @@ if (window.__pan.inertiaStartListener) {
     const domObserver = (callback: MutationCallback): void => {
         const observer = new MutationObserver(callback);
 
-        observer.observe(document.body, { childList: true, subtree: true });
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+        });
 
         window.__pan.observer = observer;
     };
@@ -130,6 +134,10 @@ if (window.__pan.inertiaStartListener) {
         const elementsBeingImpressed = document.querySelectorAll("[data-pan]");
 
         elementsBeingImpressed.forEach((element: Element): void => {
+            if (! element.checkVisibility()) {
+                return;
+            }
+
             const name = element.getAttribute("data-pan");
 
             if (name === null) {
