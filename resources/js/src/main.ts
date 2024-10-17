@@ -130,6 +130,10 @@ if (window.__pan.inertiaStartListener) {
         const elementsBeingImpressed = document.querySelectorAll("[data-pan]");
 
         elementsBeingImpressed.forEach((element: Element): void => {
+            if (! element.checkVisibility()) {
+                return;
+            }
+
             const name = element.getAttribute("data-pan");
 
             if (name === null) {
