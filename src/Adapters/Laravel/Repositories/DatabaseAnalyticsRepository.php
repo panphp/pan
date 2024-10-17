@@ -62,10 +62,8 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     /**
      * Delete a specific analytic by ID.
      */
-    public function delete(int $id): string
+    public function delete(int $id): int
     {
-        return DB::table('pan_analytics')->where('id', $id)->delete()
-            ? "Analytic has been deleted."
-            : "Analytic not found or already deleted.";
+        return DB::table('pan_analytics')->where('id', $id)->delete();
     }
 }

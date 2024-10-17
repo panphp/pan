@@ -30,12 +30,24 @@ class PanDeleteCommand extends Command
     {
         $id = (int) $this->argument('id');
 
-        if ($id > 0) {
-            $this->info(
-                $repository->delete($id)
-            );
-        } else {
-            $this->error('Analytic ID must be a positive integer.');
+        if ($this->isInvalidId($id)) {
+            $this->error('Analytic ID must be greater than 0.');
+
+            return;
         }
+
+        if ($repository->delete($id) !== 0) {
+            $this->info('Analytic has been deleted.');
+        } else {
+            $this->error('Record not found or already deleted.');
+        }
+    }
+
+    /**
+     * Check if the ID is invalid.
+     */
+    private function isInvalidId(int $id): bool
+    {
+        return $id <= 0;
     }
 }

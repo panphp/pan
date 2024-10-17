@@ -12,17 +12,17 @@ it('deletes a specific analytic by ID', function (): void {
         ->expects('delete')
         ->with(1)
         ->once()
-        ->andReturn('Analytic has been deleted.');
+        ->andReturn(1);
 
     $this->artisan('pan:delete', ['id' => 1])
-        ->assertExitCode(0)
-        ->expectsOutput('Analytic has been deleted.');
+        ->expectsOutput('Analytic has been deleted.')
+        ->assertExitCode(0);
 });
 
 it('fails when no argument is provided', function (): void {
     $this->artisan('pan:delete')
-        ->assertExitCode(1)
-        ->expectsOutput('Not enough arguments (missing: "id").');
+        ->expectsOutput('Not enough arguments (missing: "id").')
+        ->assertExitCode(1);
 });
 
 it('handles non-existent analytic gracefully', function (): void {
@@ -30,9 +30,9 @@ it('handles non-existent analytic gracefully', function (): void {
         ->expects('delete')
         ->with(26)
         ->once()
-        ->andReturn('Analytic not found or already deleted.');
+        ->andReturn(0);
 
     $this->artisan('pan:delete', ['id' => 26])
-        ->assertExitCode(0)
-        ->expectsOutput('Analytic not found or already deleted.');
+        ->expectsOutput('Record not found or already deleted.')
+        ->assertExitCode(0);
 });
