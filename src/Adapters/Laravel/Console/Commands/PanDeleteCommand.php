@@ -31,7 +31,7 @@ class PanDeleteCommand extends Command
         $id = $this->option('id');
 
         if (! $id) {
-            $this->error('Please specify--id');
+            $this->error('Please specify --id=');
         }
 
         $repository->delete((int) $id);
