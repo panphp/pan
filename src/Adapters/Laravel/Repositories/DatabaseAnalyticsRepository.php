@@ -60,8 +60,6 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     }
 
     /**
-     * {@inheritdoc}
-     */
      * Delete a specific analytic by ID.
      */
     public function delete(int $id): void
