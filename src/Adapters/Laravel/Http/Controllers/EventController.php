@@ -23,7 +23,14 @@ final readonly class EventController
         /** @var Collection<int, array{name: string, type: string}> $events */
         $events = $request->collect('events');
 
-        $events->each(fn (array $event) => $action->handle($event['name'], EventType::from($event['type'])));
+        $events->groupBy(fn (array $event): string => $event['name'])
+            ->each(function (Collection $eventsByName, string $name) use ($action): void {
+                if ($eventsByName->count() > 1) {
+                    $action->handle($name, $eventsByName->flatMap(fn (array $event): array => [EventType::from($event['type'])])->all());
+                } else {
+                    $action->handle($name, EventType::from($eventsByName->sole()['type']));
+                }
+            });
 
         return response()->noContent();
     }

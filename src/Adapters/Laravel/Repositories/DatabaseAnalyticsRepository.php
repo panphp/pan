@@ -68,6 +68,28 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     }
 
     /**
+     * Increments the given array of events for the given analytic.
+     *
+     * @param  array<array-key, EventType>  $events
+     */
+    public function incrementEach(string $name, array $events): void
+    {
+        $query = DB::table('pan_analytics')->get();
+
+        if ($query->where('name', $name)->count() === 0) {
+            if ($query->count() < 50) {
+                $data = array_merge(['name' => $name], array_fill_keys(array_map(fn (EventType $event): string => $event->column(), $events), 1));
+
+                DB::table('pan_analytics')->insert($data);
+            }
+
+            return;
+        }
+
+        DB::table('pan_analytics')->where('name', $name)->incrementEach(array_fill_keys(array_map(fn (EventType $event): string => $event->column(), $events), 1));
+    }
+
+    /**
      * Flush all analytics.
      */
     public function flush(): void
