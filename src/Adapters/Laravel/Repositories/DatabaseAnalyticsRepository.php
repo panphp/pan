@@ -32,7 +32,7 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     {
         /** @var array<int, Analytic> $all */
         $all = DB::table('pan_analytics')->get()->map(fn (mixed $analytic): Analytic => new Analytic(
-            id: $analytic->id, // @phpstan-ignore-line
+            id: (int) $analytic->id, // @phpstan-ignore-line
             name: $analytic->name, // @phpstan-ignore-line
             impressions: $analytic->impressions, // @phpstan-ignore-line
             hovers: $analytic->hovers, // @phpstan-ignore-line
