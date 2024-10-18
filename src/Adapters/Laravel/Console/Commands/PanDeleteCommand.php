@@ -7,7 +7,7 @@ namespace Pan\Adapters\Laravel\Console\Commands;
 use Illuminate\Console\Command;
 use Pan\Contracts\AnalyticsRepository;
 
-class PanDeleteCommand extends Command
+final class PanDeleteCommand extends Command
 {
     /**
      * The name and signature of the console command.
