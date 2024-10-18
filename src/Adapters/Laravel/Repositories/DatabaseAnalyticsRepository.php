@@ -47,7 +47,7 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
      */
     public function increment(string $name, EventType $event): void
     {
-        if (! $this->isAllowed($name)) {
+        if ($this->isNotAllowed($name)) {
             return;
         }
 
@@ -69,7 +69,7 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
      */
     public function incrementEach(string $name, array $events): void
     {
-        if (! $this->isAllowed($name)) {
+        if ($this->isNotAllowed($name)) {
             return;
         }
 
@@ -94,13 +94,13 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     }
 
     /**
-     * Check if the analytic is allowed.
+     * Check if the analytic is not allowed.
      */
-    private function isAllowed(string $name): bool
+    private function isNotAllowed(string $name): bool
     {
         ['allowed_analytics' => $allowedAnalytics] = $this->config->toArray();
 
-        return ! (count($allowedAnalytics) > 0 && ! in_array($name, $allowedAnalytics, true));
+        return count($allowedAnalytics) > 0 && ! in_array($name, $allowedAnalytics, true);
     }
 
     /**
