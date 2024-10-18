@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Number;
 use Pan\Presentors\AnalyticPresentor;
 use Pan\ValueObjects\Analytic;
 
@@ -80,6 +82,25 @@ it('presents huge numbers', function (): void {
         'impressions' => '1,000,000',
         'hovers' => '1,000,000 (100.0%)',
         'clicks' => '1,000,000 (100.0%)',
+    ]);
+});
+
+it('presents huge numbers with another locale', function (): void {
+
+    Number::useLocale('nl');
+
+    $analytic = new Analytic(1, 'help-modal', 1000000, 1000000, 1000000);
+
+    $presentor = new AnalyticPresentor;
+
+    $rows = array_map(fn ($value): string => strip_tags($value), $presentor->present($analytic));
+
+    expect($rows)->toBe([
+        'id' => '#1',
+        'name' => 'help-modal',
+        'impressions' => '1.000.000',
+        'hovers' => '1.000.000 (100,0%)',
+        'clicks' => '1.000.000 (100,0%)',
     ]);
 });
 

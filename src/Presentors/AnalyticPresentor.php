@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pan\Presentors;
 
+use Illuminate\Support\Number;
 use Pan\ValueObjects\Analytic;
 
 /**
@@ -32,7 +33,7 @@ final class AnalyticPresentor
      */
     private function toHumanReadableNumber(int $number): string
     {
-        return number_format($number);
+        return (string) Number::format($number);
     }
 
     /**
@@ -44,6 +45,6 @@ final class AnalyticPresentor
             return 'Infinity%';
         }
 
-        return number_format($part / $total * 100, 1).'%';
+        return (string) Number::percentage($part / $total * 100, 1);
     }
 }
