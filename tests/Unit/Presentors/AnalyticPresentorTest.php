@@ -1,9 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Number;
 use Pan\Presentors\AnalyticPresentor;
 use Pan\ValueObjects\Analytic;
+
+beforeEach(function () {
+    Number::useLocale('en');
+});
 
 it('present an analytic', function (): void {
     $analytic = new Analytic(1, 'help-modal', 1, 1, 1);
