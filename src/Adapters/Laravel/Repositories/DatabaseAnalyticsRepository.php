@@ -34,9 +34,9 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
         $all = DB::table('pan_analytics')->get()->map(fn (mixed $analytic): Analytic => new Analytic(
             id: (int) $analytic->id, // @phpstan-ignore-line
             name: $analytic->name, // @phpstan-ignore-line
-            impressions: $analytic->impressions, // @phpstan-ignore-line
-            hovers: $analytic->hovers, // @phpstan-ignore-line
-            clicks: $analytic->clicks, // @phpstan-ignore-line
+            impressions: (int) $analytic->impressions, // @phpstan-ignore-line
+            hovers: (int) $analytic->hovers, // @phpstan-ignore-line
+            clicks: (int) $analytic->clicks, // @phpstan-ignore-line
         ))->toArray();
 
         return $all;
