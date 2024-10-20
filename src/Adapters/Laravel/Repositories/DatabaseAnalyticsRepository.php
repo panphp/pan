@@ -47,17 +47,12 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
      */
     public function increment(string $name, EventType $event): void
     {
-        [
-            'allowed_analytics' => $allowedAnalytics,
-            'max_analytics' => $maxAnalytics,
-        ] = $this->config->toArray();
-
-        if (count($allowedAnalytics) > 0 && ! in_array($name, $allowedAnalytics, true)) {
+        if ($this->isNotAllowed($name)) {
             return;
         }
 
-        if (DB::table('pan_analytics')->where('name', $name)->count() === 0) {
-            if (DB::table('pan_analytics')->count() < $maxAnalytics) {
+        if ($this->isNewAnalytic($name)) {
+            if ($this->canAddMoreAnalytics()) {
                 DB::table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
             }
 
@@ -68,10 +63,61 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     }
 
     /**
+     * Increments the given array of events for the given analytic.
+     *
+     * @param  array<array-key, EventType>  $events
+     */
+    public function incrementEach(string $name, array $events): void
+    {
+        if ($this->isNotAllowed($name)) {
+            return;
+        }
+
+        if ($this->isNewAnalytic($name)) {
+            if ($this->canAddMoreAnalytics()) {
+                $data = array_merge(['name' => $name], array_fill_keys(array_map(fn (EventType $event): string => $event->column(), $events), 1));
+                DB::table('pan_analytics')->insert($data);
+            }
+
+            return;
+        }
+
+        DB::table('pan_analytics')->where('name', $name)->incrementEach(array_fill_keys(array_map(fn (EventType $event): string => $event->column(), $events), 1));
+    }
+
+    /**
      * Flush all analytics.
      */
     public function flush(): void
     {
         DB::table('pan_analytics')->truncate();
+    }
+
+    /**
+     * Check if the analytic is not allowed.
+     */
+    private function isNotAllowed(string $name): bool
+    {
+        ['allowed_analytics' => $allowedAnalytics] = $this->config->toArray();
+
+        return count($allowedAnalytics) > 0 && ! in_array($name, $allowedAnalytics, true);
+    }
+
+    /**
+     * Check if the analytic is new.
+     */
+    private function isNewAnalytic(string $name): bool
+    {
+        return DB::table('pan_analytics')->where('name', $name)->count() === 0;
+    }
+
+    /**
+     * Check if we can add more analytics.
+     */
+    private function canAddMoreAnalytics(): bool
+    {
+        ['max_analytics' => $maxAnalytics] = $this->config->toArray();
+
+        return DB::table('pan_analytics')->count() < $maxAnalytics;
     }
 }
