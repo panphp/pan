@@ -30,8 +30,8 @@
         "laravel/pint": "^1.18.1",
         "pestphp/pest": "^3.4.1",
         "pestphp/pest-plugin-type-coverage": "^3.1.0",
-        "phpstan/phpstan": "^1.12.6",
-        "rector/rector": "^1.2.7",
+        "phpstan/phpstan": "^1.12.7",
+        "rector/rector": "^1.2.8",
         "symfony/var-dumper": "^7.1.5"
     },
     "autoload": {
