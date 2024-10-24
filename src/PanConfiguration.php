@@ -22,6 +22,7 @@ final class PanConfiguration
     private function __construct(
         private int $maxAnalytics = 50,
         private array $allowedAnalytics = [],
+        private string $prefixUrl = 'pan',
     ) {
         //
     }
@@ -59,6 +60,16 @@ final class PanConfiguration
     }
 
     /**
+     * Sets the prefix url to be used.
+     *
+     * @internal
+     */
+    public function setPrefixUrl(string $url): void
+    {
+        $this->prefixUrl = $url;
+    }
+
+    /**
      * Sets the maximum number of analytics to store.
      */
     public static function maxAnalytics(int $number): void
@@ -85,6 +96,16 @@ final class PanConfiguration
     }
 
     /**
+     * Sets the prefix url to be used.
+     *
+     * @internal
+     */
+    public static function prefixUrl(string $url): void
+    {
+        self::instance()->setPrefixUrl($url);
+    }
+
+    /**
      * Resets the configuration to its default values.
      *
      * @internal
@@ -93,12 +114,13 @@ final class PanConfiguration
     {
         self::maxAnalytics(50);
         self::allowedAnalytics([]);
+        self::prefixUrl('pan');
     }
 
     /**
      * Converts the Pan configuration to an array.
      *
-     * @return array{max_analytics: int, allowed_analytics: array<int, string>}
+     * @return array{max_analytics: int, allowed_analytics: array<int, string>, prefix_url: string}
      *
      * @internal
      */
@@ -107,6 +129,7 @@ final class PanConfiguration
         return [
             'max_analytics' => $this->maxAnalytics,
             'allowed_analytics' => $this->allowedAnalytics,
+            'prefix_url' => $this->prefixUrl,
         ];
     }
 }
