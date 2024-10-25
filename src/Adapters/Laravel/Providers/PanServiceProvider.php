@@ -69,7 +69,7 @@ final class PanServiceProvider extends ServiceProvider
         /** @var PanConfiguration $config */
         $config = $this->app->get(PanConfiguration::class);
 
-        Route::prefix($config->toArray()['prefix_url'])->group(function (): void {
+        Route::prefix($config->toArray()['route_prefix'])->group(function (): void {
             Route::post('/events', [EventController::class, 'store']);
         });
     }

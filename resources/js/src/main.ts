@@ -8,7 +8,7 @@ window.__pan =
     window.__pan ||
     ({
         csrfToken: "%_PAN_CSRF_TOKEN_%",
-        prefixUrl: "%_PAN_PREFIX_URL_%",
+        routePrefix: "%_PAN_ROUTE_PREFIX_%",
         observer: null,
         clickListener: null,
         mouseoverListener: null,
@@ -71,7 +71,7 @@ if (window.__pan.inertiaStartListener) {
         queue = [];
 
         navigator.sendBeacon(
-            `/${window.__pan.prefixUrl}/events`,
+            `/${window.__pan.routePrefix}/events`,
             new Blob(
                 [
                     JSON.stringify({

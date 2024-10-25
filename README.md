@@ -112,7 +112,7 @@ use Pan\PanConfiguration;
 
 public function register(): void
 {
-    PanConfiguration::prefixUrl('new-pan');
+    PanConfiguration::routePrefix('new-pan');
 }
 ```
 

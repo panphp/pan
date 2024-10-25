@@ -22,7 +22,7 @@ final class PanConfiguration
     private function __construct(
         private int $maxAnalytics = 50,
         private array $allowedAnalytics = [],
-        private string $prefixUrl = 'pan',
+        private string $routePrefix = 'pan',
     ) {
         //
     }
@@ -60,13 +60,13 @@ final class PanConfiguration
     }
 
     /**
-     * Sets the prefix url to be used.
+     * Sets the route prefix to be used.
      *
      * @internal
      */
-    public function setPrefixUrl(string $url): void
+    public function setRoutePrefix(string $prefix): void
     {
-        $this->prefixUrl = $url;
+        $this->routePrefix = $prefix;
     }
 
     /**
@@ -96,13 +96,13 @@ final class PanConfiguration
     }
 
     /**
-     * Sets the prefix url to be used.
+     * Sets the route prefix to be used.
      *
      * @internal
      */
-    public static function prefixUrl(string $url): void
+    public static function routePrefix(string $prefix): void
     {
-        self::instance()->setPrefixUrl($url);
+        self::instance()->setRoutePrefix($prefix);
     }
 
     /**
@@ -114,13 +114,13 @@ final class PanConfiguration
     {
         self::maxAnalytics(50);
         self::allowedAnalytics([]);
-        self::prefixUrl('pan');
+        self::routePrefix('pan');
     }
 
     /**
      * Converts the Pan configuration to an array.
      *
-     * @return array{max_analytics: int, allowed_analytics: array<int, string>, prefix_url: string}
+     * @return array{max_analytics: int, allowed_analytics: array<int, string>, route_prefix: string}
      *
      * @internal
      */
@@ -129,7 +129,7 @@ final class PanConfiguration
         return [
             'max_analytics' => $this->maxAnalytics,
             'allowed_analytics' => $this->allowedAnalytics,
-            'prefix_url' => $this->prefixUrl,
+            'route_prefix' => $this->routePrefix,
         ];
     }
 }

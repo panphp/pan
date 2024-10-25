@@ -45,7 +45,7 @@ final readonly class InjectJavascriptLibrary
     {
         $original = $response->original ?? null;
 
-        ['prefix_url' => $prefixUrl] = app(PanConfiguration::class)->toArray();
+        ['route_prefix' => $routePrefix] = app(PanConfiguration::class)->toArray();
 
         $response->setContent(
             str_replace(
@@ -57,8 +57,8 @@ final readonly class InjectJavascriptLibrary
                         </body>
                         HTML,
                     str_replace(
-                        ['%_PAN_CSRF_TOKEN_%', '%_PAN_PREFIX_URL_%'],
-                        [(string) csrf_token(), $prefixUrl],
+                        ['%_PAN_CSRF_TOKEN_%', '%_PAN_ROUTE_PREFIX_%'],
+                        [(string) csrf_token(), $routePrefix],
                         File::get(__DIR__.'/../../../../../resources/js/dist/pan.iife.js')
                     ),
                 ),
