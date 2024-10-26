@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Pan;
 
-/**
- * @internal
- */
 final class PanConfiguration
 {
     /**
