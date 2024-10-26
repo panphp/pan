@@ -4,6 +4,7 @@ exports.window.__pan =
     exports.window.__pan ||
         {
             csrfToken: "%_PAN_CSRF_TOKEN_%",
+            routePrefix: "%_PAN_ROUTE_PREFIX_%",
             observer: null,
             clickListener: null,
             mouseoverListener: null,
@@ -46,7 +47,7 @@ if (exports.window.__pan.inertiaStartListener) {
         }
         var onGoingQueue = queue.slice();
         queue = [];
-        navigator.sendBeacon("/pan/events", new Blob([
+        navigator.sendBeacon("/".concat(exports.window.__pan.routePrefix, "/events"), new Blob([
             JSON.stringify({
                 events: onGoingQueue,
                 _token: exports.window.__pan.csrfToken,
