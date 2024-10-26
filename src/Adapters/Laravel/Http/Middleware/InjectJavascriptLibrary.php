@@ -16,6 +16,14 @@ use Symfony\Component\HttpFoundation\Response;
 final readonly class InjectJavascriptLibrary
 {
     /**
+     * Creates a new middleware instance.
+     */
+    public function __construct(private PanConfiguration $config)
+    {
+        //
+    }
+
+    /**
      * Handle an incoming request.
      *
      * @param  Closure(Request): (Response)  $next
@@ -45,7 +53,7 @@ final readonly class InjectJavascriptLibrary
     {
         $original = $response->original ?? null;
 
-        ['route_prefix' => $routePrefix] = app(PanConfiguration::class)->toArray();
+        ['route_prefix' => $routePrefix] = $this->config->toArray();
 
         $response->setContent(
             str_replace(

@@ -97,7 +97,7 @@ it('does not create an analytic event if the event is invalid', function (): voi
 });
 
 it('can create an event using a custom prefix url', function (): void {
-    PanConfiguration::instance()->setRoutePrefix('new-pan');
+    PanConfiguration::routePrefix('new-pan');
 
     $this->reloadApplication();
 
@@ -116,7 +116,8 @@ it('can create an event using a custom prefix url', function (): void {
         ['id' => 1, 'name' => 'help-modal', 'impressions' => 1, 'hovers' => 0, 'clicks' => 0],
     ]);
 })->after(function (): void {
-    PanConfiguration::instance()->setRoutePrefix('pan');
+    PanConfiguration::routePrefix('pan');
+
     $this->reloadApplication();
 });
 
