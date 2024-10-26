@@ -104,6 +104,20 @@ To flush your product analytics, you may use the `pan:flush` Artisan command:
 php artisan pan:flush
 ```
 
+## Change `/pan/*` endpoints
+By default, Pan sets the endpoints to have the prefix of `/pan`, but if you want to change it, you can by doing this:
+
+```php
+use Pan\PanConfiguration;
+
+public function register(): void
+{
+    PanConfiguration::routePrefix('new-pan');
+}
+```
+
+With that set the url to track the analytics will be `/new-pan/events`.
+
 ## How does it work?
 
 Via middleware, Pan injects a simple JavaScript library into your HTML pages. This library listens to events like `viewed`, `clicked`, or `hovered` and sends the data to your Laravel application. Note that this library does not collect any personal information; such as IP addresses, user agents, or any information that could be used to identify a user.

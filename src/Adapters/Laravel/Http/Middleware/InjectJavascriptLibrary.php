@@ -7,6 +7,7 @@ namespace Pan\Adapters\Laravel\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Pan\PanConfiguration;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -44,6 +45,8 @@ final readonly class InjectJavascriptLibrary
     {
         $original = $response->original ?? null;
 
+        ['route_prefix' => $routePrefix] = app(PanConfiguration::class)->toArray();
+
         $response->setContent(
             str_replace(
                 '</body>',
@@ -53,7 +56,11 @@ final readonly class InjectJavascriptLibrary
                             </script>
                         </body>
                         HTML,
-                    str_replace('%_PAN_CSRF_TOKEN_%', (string) csrf_token(), File::get(__DIR__.'/../../../../../resources/js/dist/pan.iife.js')),
+                    str_replace(
+                        ['%_PAN_CSRF_TOKEN_%', '%_PAN_ROUTE_PREFIX_%'],
+                        [(string) csrf_token(), $routePrefix],
+                        File::get(__DIR__.'/../../../../../resources/js/dist/pan.iife.js')
+                    ),
                 ),
                 (string) $response->getContent(),
             )

@@ -8,6 +8,7 @@ window.__pan =
     window.__pan ||
     ({
         csrfToken: "%_PAN_CSRF_TOKEN_%",
+        routePrefix: "%_PAN_ROUTE_PREFIX_%",
         observer: null,
         clickListener: null,
         mouseoverListener: null,
@@ -70,7 +71,7 @@ if (window.__pan.inertiaStartListener) {
         queue = [];
 
         navigator.sendBeacon(
-            "/pan/events",
+            `/${window.__pan.routePrefix}/events`,
             new Blob(
                 [
                     JSON.stringify({
@@ -134,7 +135,7 @@ if (window.__pan.inertiaStartListener) {
         const elementsBeingImpressed = document.querySelectorAll("[data-pan]");
 
         elementsBeingImpressed.forEach((element: Element): void => {
-            if (! element.checkVisibility()) {
+            if (!element.checkVisibility()) {
                 return;
             }
 

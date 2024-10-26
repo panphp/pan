@@ -96,6 +96,30 @@ it('does not create an analytic event if the event is invalid', function (): voi
     expect($analytics)->toBe([]);
 });
 
+it('can create an event using a custom prefix url', function (): void {
+    PanConfiguration::instance()->setRoutePrefix('new-pan');
+
+    $this->reloadApplication();
+
+    $response = $this->post('/new-pan/events', [
+        'events' => [[
+            'name' => 'help-modal',
+            'type' => 'impression',
+        ]],
+    ]);
+
+    $response->assertStatus(204);
+
+    $analytics = array_map(fn (Analytic $analytic): array => $analytic->toArray(), app(AnalyticsRepository::class)->all());
+
+    expect($analytics)->toBe([
+        ['id' => 1, 'name' => 'help-modal', 'impressions' => 1, 'hovers' => 0, 'clicks' => 0],
+    ]);
+})->after(function (): void {
+    PanConfiguration::instance()->setRoutePrefix('pan');
+    $this->reloadApplication();
+});
+
 it('does handle gracefully when there is more than 50 analytics created by default', function (): void {
     DB::table('pan_analytics')->insert(array_map(fn (int $index): array => [
         'name' => "help-modal-$index",

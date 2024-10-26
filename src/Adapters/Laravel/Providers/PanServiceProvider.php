@@ -66,7 +66,10 @@ final class PanServiceProvider extends ServiceProvider
 
         $kernel->pushMiddleware(InjectJavascriptLibrary::class);
 
-        Route::prefix('pan')->group(function (): void {
+        /** @var PanConfiguration $config */
+        $config = $this->app->get(PanConfiguration::class);
+
+        Route::prefix($config->toArray()['route_prefix'])->group(function (): void {
             Route::post('/events', [EventController::class, 'store']);
         });
     }
