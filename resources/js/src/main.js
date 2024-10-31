@@ -92,7 +92,8 @@ if (exports.window.__pan.inertiaStartListener) {
     var detectImpressions = function () {
         var elementsBeingImpressed = document.querySelectorAll("[data-pan]");
         elementsBeingImpressed.forEach(function (element) {
-            if (!element.checkVisibility()) {
+            if (element.checkVisibility !== undefined &&
+                !element.checkVisibility()) {
                 return;
             }
             var name = element.getAttribute("data-pan");

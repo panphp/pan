@@ -135,7 +135,10 @@ if (window.__pan.inertiaStartListener) {
         const elementsBeingImpressed = document.querySelectorAll("[data-pan]");
 
         elementsBeingImpressed.forEach((element: Element): void => {
-            if (! element.checkVisibility()) {
+            if (
+                element.checkVisibility !== undefined &&
+                !element.checkVisibility()
+            ) {
                 return;
             }
 
