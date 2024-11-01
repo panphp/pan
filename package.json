@@ -8,8 +8,8 @@
         "test:lint": "prettier --check resources/js/src"
     },
     "devDependencies": {
-        "prettier": "^2.4.1",
+        "prettier": "^3.3.3",
         "typescript": "^5.6.3",
-        "vite": "^5.4.8"
+        "vite": "^5.4.10"
     }
 }
