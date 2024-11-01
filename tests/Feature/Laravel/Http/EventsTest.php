@@ -79,6 +79,28 @@ it('can create an analytic impression event and click event', function (): void 
     ]);
 });
 
+it('does not create an analytic event if the event name is invalid', function (string $name): void {
+    $response = $this->post('/pan/events', [
+        'events' => [[
+            'name' => $name,
+            'type' => 'impression',
+        ]],
+    ]);
+
+    $response->assertStatus(302)->assertSessionHasErrors([
+        'events.0.name' => 'The events.0.name field must only contain letters, numbers, dashes, and underscores.',
+    ]);
+
+    $analytics = array_map(fn (Analytic $analytic): array => $analytic->toArray(), app(AnalyticsRepository::class)->all());
+
+    expect($analytics)->toBe([]);
+})->with([
+    'help modal',
+    'help.modal',
+    'help/modal',
+    '🙋',
+]);
+
 it('does not create an analytic event if the event is invalid', function (): void {
     $response = $this->post('/pan/events', [
         'events' => [[

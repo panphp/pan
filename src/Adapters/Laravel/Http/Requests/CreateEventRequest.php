@@ -22,7 +22,7 @@ final class CreateEventRequest extends FormRequest
     {
         return [
             'events' => ['required', 'array'],
-            'events.*.name' => ['required', 'string', 'regex:/^[A-Za-z0-9-_]+$/'],
+            'events.*.name' => ['required', 'string', 'alpha_dash:ascii'],
             'events.*.type' => ['required', Rule::enum(EventType::class)],
         ];
     }
