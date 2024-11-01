@@ -1,15 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.window.__pan =
-    exports.window.__pan ||
-        {
-            csrfToken: "%_PAN_CSRF_TOKEN_%",
-            routePrefix: "%_PAN_ROUTE_PREFIX_%",
-            observer: null,
-            clickListener: null,
-            mouseoverListener: null,
-            inertiaStartListener: null,
-        };
+exports.window.__pan = exports.window.__pan || {
+    csrfToken: "%_PAN_CSRF_TOKEN_%",
+    routePrefix: "%_PAN_ROUTE_PREFIX_%",
+    observer: null,
+    clickListener: null,
+    mouseoverListener: null,
+    inertiaStartListener: null,
+};
 if (exports.window.__pan.observer) {
     exports.window.__pan.observer.disconnect();
     exports.window.__pan.observer = null;
@@ -19,11 +17,17 @@ if (exports.window.__pan.clickListener) {
     exports.window.__pan.clickListener = null;
 }
 if (exports.window.__pan.mouseoverListener) {
-    document.removeEventListener("mouseover", exports.window.__pan.mouseoverListener);
+    document.removeEventListener(
+        "mouseover",
+        exports.window.__pan.mouseoverListener
+    );
     exports.window.__pan.mouseoverListener = null;
 }
 if (exports.window.__pan.inertiaStartListener) {
-    document.removeEventListener("inertia:start", exports.window.__pan.inertiaStartListener);
+    document.removeEventListener(
+        "inertia:start",
+        exports.window.__pan.inertiaStartListener
+    );
     exports.window.__pan.inertiaStartListener = null;
 }
 (function () {
@@ -47,14 +51,20 @@ if (exports.window.__pan.inertiaStartListener) {
         }
         var onGoingQueue = queue.slice();
         queue = [];
-        navigator.sendBeacon("/".concat(exports.window.__pan.routePrefix, "/events"), new Blob([
-            JSON.stringify({
-                events: onGoingQueue,
-                _token: exports.window.__pan.csrfToken,
-            }),
-        ], {
-            type: "application/json",
-        }));
+        navigator.sendBeacon(
+            "/".concat(exports.window.__pan.routePrefix, "/events"),
+            new Blob(
+                [
+                    JSON.stringify({
+                        events: onGoingQueue,
+                        _token: exports.window.__pan.csrfToken,
+                    }),
+                ],
+                {
+                    type: "application/json",
+                }
+            )
+        );
     };
     var queueCommit = function () {
         queueTimeout && clearTimeout(queueTimeout);
@@ -92,8 +102,10 @@ if (exports.window.__pan.inertiaStartListener) {
     var detectImpressions = function () {
         var elementsBeingImpressed = document.querySelectorAll("[data-pan]");
         elementsBeingImpressed.forEach(function (element) {
-            if (element.checkVisibility !== undefined &&
-                !element.checkVisibility()) {
+            if (
+                element.checkVisibility !== undefined &&
+                !element.checkVisibility()
+            ) {
                 return;
             }
             var name = element.getAttribute("data-pan");
@@ -113,33 +125,52 @@ if (exports.window.__pan.inertiaStartListener) {
     };
     domObserver(function () {
         impressed.forEach(function (name) {
-            var element = document.querySelector("[data-pan='".concat(name, "']"));
+            var element = document.querySelector(
+                "[data-pan='".concat(name, "']")
+            );
             if (element === null) {
-                impressed = impressed.filter(function (n) { return n !== name; });
-                hovered = hovered.filter(function (n) { return n !== name; });
-                clicked = clicked.filter(function (n) { return n !== name; });
+                impressed = impressed.filter(function (n) {
+                    return n !== name;
+                });
+                hovered = hovered.filter(function (n) {
+                    return n !== name;
+                });
+                clicked = clicked.filter(function (n) {
+                    return n !== name;
+                });
             }
         });
         detectImpressions();
     });
-    exports.window.__pan.clickListener = function (event) { return send(event, "click"); };
+    exports.window.__pan.clickListener = function (event) {
+        return send(event, "click");
+    };
     document.addEventListener("click", exports.window.__pan.clickListener);
     exports.window.__pan.mouseoverListener = function (event) {
         return send(event, "hover");
     };
-    document.addEventListener("mouseover", exports.window.__pan.mouseoverListener);
+    document.addEventListener(
+        "mouseover",
+        exports.window.__pan.mouseoverListener
+    );
     exports.window.__pan.inertiaStartListener = function (event) {
         impressed = [];
         hovered = [];
         clicked = [];
         detectImpressions();
     };
-    document.addEventListener("inertia:start", exports.window.__pan.inertiaStartListener);
+    document.addEventListener(
+        "inertia:start",
+        exports.window.__pan.inertiaStartListener
+    );
     exports.window.__pan.beforeUnloadListener = function (event) {
         if (queue.length === 0) {
             return;
         }
         commit();
     };
-    exports.window.addEventListener("beforeunload", exports.window.__pan.beforeUnloadListener);
+    exports.window.addEventListener(
+        "beforeunload",
+        exports.window.__pan.beforeUnloadListener
+    );
 })();
