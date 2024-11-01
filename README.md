@@ -57,6 +57,9 @@ Finally, you may start tracking your pages or components adding the `data-pan` a
 </div>
 ```
 
+> [!IMPORTANT]  
+> Event names must only contain letters, numbers, dashes, and underscores.
+
 ## Visualize your product analytics
 
 To visualize your product analytics, you may use the `pan` Artisan command:
