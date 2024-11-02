@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v0.1.8 - 2024-11-01
+
+-   Fixes issue with old iPhone devices
+
 ## v0.1.7 - 2024-10-26
 
 -   Removes `@internal` annotation from the `PanConfiguration` class
