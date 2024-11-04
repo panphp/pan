@@ -6,6 +6,7 @@ namespace Pan\Adapters\Laravel\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\File;
 use Pan\PanConfiguration;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,16 @@ final readonly class InjectJavascriptLibrary
     {
         /** @var Response $response */
         $response = $next($request);
+        $route = $request->route();
+
+        if ($route instanceof Route) {
+            /** @var string[] $middleware */
+            $middleware = $route->middleware(null);
+
+            if (in_array(WithoutPan::class, $middleware)) {
+                return $response;
+            }
+        }
 
         if ($response->headers->get('Content-Type') === 'text/html; charset=UTF-8') {
             $content = (string) $response->getContent();
@@ -58,7 +69,8 @@ final readonly class InjectJavascriptLibrary
         $response->setContent(
             str_replace(
                 '</body>',
-                sprintf(<<<'HTML'
+                sprintf(
+                    <<<'HTML'
                             <script>
                                 %s
                             </script>
