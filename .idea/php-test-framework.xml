@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpTestFrameworkSettings">
+    <test_tools>
+      <tool tool_name="Pest">
+        <settings>
+          <configurations>
+            <local_configuration executable_path="$PROJECT_DIR$/vendor/bin/pest" />
+          </configurations>
+        </settings>
+      </tool>
+    </test_tools>
+  </component>
+  <component name="PhpTestFrameworkVersionCache">
+    <tools_cache>
+      <tool tool_name="Pest">
+        <cache>
+          <versions>
+            <info id="Local/Users/bhaidar/projects/github/pan/vendor/bin/pest" version="3.5.1" />
+          </versions>
+        </cache>
+      </tool>
+    </tools_cache>
+  </component>
+</project>
