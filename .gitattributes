@@ -16,5 +16,4 @@ package.json       export-ignore
 package-lock.json  export-ignore
 tsconfig.json      export-ignore
 vite.config.js     export-ignore
-vite.config.ts     export-ignore
 
