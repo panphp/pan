@@ -56,15 +56,23 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
             return;
         }
 
-        if (DB::table('pan_analytics')->where('name', $name)->count() === 0) {
-            if (DB::table('pan_analytics')->count() < $maxAnalytics) {
-                DB::table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
+        DB::transaction(function () use ($name, $event, $maxAnalytics) {
+            // Lock the table for this name to prevent race conditions
+            $existing = DB::table('pan_analytics')
+                ->where('name', $name)
+                ->lockForUpdate()
+                ->first();
+
+            if ($existing === null) {
+                // Check total count with lock to prevent race condition on max analytics
+                if (DB::table('pan_analytics')->lockForUpdate()->count() < $maxAnalytics) {
+                    DB::table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
+                }
+                return;
             }
 
-            return;
-        }
-
         DB::table('pan_analytics')->where('name', $name)->increment($event->column());
+        });
     }
 
     /**
