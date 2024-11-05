@@ -117,6 +117,17 @@ To flush your product analytics, you may use the `pan:flush` Artisan command:
 php artisan pan:flush
 ```
 
+## Exclude injection for certain routes
+
+If you want to exclude injection on certain routes of your application, you can
+use the `Pan\Adapters\Laravel\Http\Middleware\WithoutPan` middleware:
+
+```php
+Route::get('/no-pan', function () {
+    return view('no-pan');
+})->middleware(WithoutPan::class);
+```
+
 ## How does it work?
 
 Via middleware, Pan injects a simple JavaScript library into your HTML pages. This library listens to events like `viewed`, `clicked`, or `hovered` and sends the data to your Laravel application. Note that this library does not collect any personal information; such as IP addresses, user agents, or any information that could be used to identify a user.

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Pan\Adapters\Laravel\Http\Middleware\WithoutPan;
 
 it('does inject the javascript library', function (): void {
     Route::get('/', fn (): string => <<<'HTML'
@@ -22,6 +23,30 @@ it('does inject the javascript library', function (): void {
     $response->assertOk()
         ->assertSee('script')
         ->assertSee('_TEST_CSRF_TOKEN_');
+});
+
+it('does not inject the javascript library when the exclusion middleware is set', function (): void {
+
+    Route::get('/', fn (): string => <<<'HTML'
+        <html lang="en">
+            <head>
+                <title>My App</title>
+            </head>
+            <body>
+                <h1>Welcome to my app</h1>
+            </body>
+        </html>
+        HTML
+    )->middleware(WithoutPan::class);
+
+    session()->put('_token', '_TEST_CSRF_TOKEN_');
+
+    $response = $this->get('/');
+
+    $response->assertOk()
+        ->assertDontSee('script')
+        ->assertDontSee('_TEST_CSRF_TOKEN_');
+
 });
 
 it('does not inject the javascript library if the content type is not text/html', function (): void {
