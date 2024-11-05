@@ -60,6 +60,7 @@ if (window.__pan.inertiaStartListener) {
     let impressed: Array<string> = [];
     let hovered: Array<string> = [];
     let clicked: Array<string> = [];
+    let sameNameElements: Array<string> = [];
 
     const commit = (): void => {
         if (queue.length === 0) {
@@ -146,6 +147,12 @@ if (window.__pan.inertiaStartListener) {
 
             if (name === null) {
                 return;
+            }
+
+            let nameElements = document.querySelectorAll(`[data-pan='${name}']`);
+            if (nameElements.length > 1 && !sameNameElements.includes(name)) {
+                console.warn(`PAN: Multiple (${nameElements.length}) elements with the same name '${name}' found`);
+                sameNameElements.push(name);
             }
 
             if (impressed.includes(name)) {
