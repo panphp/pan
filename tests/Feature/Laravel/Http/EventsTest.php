@@ -265,6 +265,18 @@ it('does handle gracefully when there is a name that is not allowed', function (
 
     $response->assertStatus(204);
 
+    $response = $this->post('/pan/events', [
+        'events' => [[
+            'name' => 'invalid-modal',
+            'type' => 'click',
+        ], [
+            'name' => 'invalid-modal',
+            'type' => 'hover',
+        ]],
+    ]);
+
+    $response->assertStatus(204);
+
     expect(DB::table('pan_analytics')->count())->toBe(0);
 
     $response = $this->post('/pan/events', [

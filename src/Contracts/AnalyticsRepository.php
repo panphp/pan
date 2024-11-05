@@ -25,6 +25,13 @@ interface AnalyticsRepository
     public function increment(string $name, EventType $event): void;
 
     /**
+     * Increments the given array of events for the given analytic.
+     *
+     * @param  array<array-key, EventType>  $events
+     */
+    public function incrementEach(string $name, array $events): void;
+
+    /**
      * Flush all analytics.
      */
     public function flush(): void;
