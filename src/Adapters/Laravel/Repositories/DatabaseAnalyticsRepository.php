@@ -16,11 +16,21 @@ use Pan\ValueObjects\Analytic;
 final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
 {
     /**
+     * @var array{
+     *      max_analytics: int,
+     *      allowed_analytics: array<int, string>,
+     *      route_prefix: string,
+     *      analytic_descriptions: array<string, string>,
+     *  }
+     */
+    private array $config;
+
+    /**
      * Creates a new analytics repository instance.
      */
-    public function __construct(private PanConfiguration $config)
+    public function __construct(PanConfiguration $config)
     {
-        //
+        $this->config = $config->toArray();
     }
 
     /**
@@ -36,7 +46,8 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
             name: $analytic->name, // @phpstan-ignore-line
             impressions: (int) $analytic->impressions, // @phpstan-ignore-line
             hovers: (int) $analytic->hovers, // @phpstan-ignore-line
-            clicks: (int) $analytic->clicks, // @phpstan-ignore-line
+            clicks: (int) $analytic->clicks, // @phpstan-ignore-line,
+            description: $this->config['analytic_descriptions'][$analytic->name] ?? null, // @phpstan-ignore-line
         ))->toArray();
 
         return $all;
@@ -50,7 +61,7 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
         [
             'allowed_analytics' => $allowedAnalytics,
             'max_analytics' => $maxAnalytics,
-        ] = $this->config->toArray();
+        ] = $this->config;
 
         if (count($allowedAnalytics) > 0 && ! in_array($name, $allowedAnalytics, true)) {
             return;

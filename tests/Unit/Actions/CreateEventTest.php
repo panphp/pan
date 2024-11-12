@@ -15,6 +15,6 @@ it('increments the click event for the given analytic', function (): void {
     $analytics = array_map(fn (Analytic $analytic): array => $analytic->toArray(), app(AnalyticsRepository::class)->all());
 
     expect($analytics)->toBe([
-        ['id' => 1, 'name' => 'help-modal', 'impressions' => 0, 'hovers' => 1, 'clicks' => 2],
+        ['id' => 1, 'name' => 'help-modal', 'description' => null, 'impressions' => 0, 'hovers' => 1, 'clicks' => 2],
     ]);
 });

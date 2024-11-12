@@ -99,6 +99,18 @@ If you want to have unlimited analytics records, you may use the `Pan::unlimited
 PanConfiguration::unlimitedAnalytics();
 ```
 
+## Provide a human description for your analytics
+
+If you want to add a human-readable description to your analytics, you may use the `PanConfiguration::analyticsDescriptions` method:
+
+```php
+PanConfiguration::analyticDescriptions([
+    'button-cta' => 'Call to action button',
+]);
+```
+
+These descriptions will be shown when you visualize your analytics via the `pan` Artisan command.
+
 ## Configure the route prefix
 
 By default, Pan's route prefix is `/pan`, but you may change it by using the `PanConfiguration::routePrefix` method:

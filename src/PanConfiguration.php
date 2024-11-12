@@ -15,11 +15,13 @@ final class PanConfiguration
      * Creates a new Pan configuration instance.
      *
      * @param  array<int, string>  $allowedAnalytics
+     * @param  array<string, string>  $analyticDescriptions
      */
     private function __construct(
         private int $maxAnalytics = 50,
         private array $allowedAnalytics = [],
         private string $routePrefix = 'pan',
+        private array $analyticDescriptions = [],
     ) {
         //
     }
@@ -67,6 +69,18 @@ final class PanConfiguration
     }
 
     /**
+     * Sets the analytic descriptions.
+     *
+     * @param  array<string, string>  $descriptions
+     *
+     * @internal
+     */
+    public function setAnalyticDescriptions(array $descriptions): void
+    {
+        $this->analyticDescriptions = $descriptions;
+    }
+
+    /**
      * Sets the maximum number of analytics to store.
      */
     public static function maxAnalytics(int $number): void
@@ -103,6 +117,16 @@ final class PanConfiguration
     }
 
     /**
+     * Sets the analytics descriptions
+     *
+     * @param  array<string, string>  $descriptions
+     */
+    public static function analyticDescriptions(array $descriptions): void
+    {
+        self::instance()->setAnalyticDescriptions($descriptions);
+    }
+
+    /**
      * Resets the configuration to its default values.
      *
      * @internal
@@ -112,12 +136,18 @@ final class PanConfiguration
         self::maxAnalytics(50);
         self::allowedAnalytics([]);
         self::routePrefix('pan');
+        self::analyticDescriptions([]);
     }
 
     /**
      * Converts the Pan configuration to an array.
      *
-     * @return array{max_analytics: int, allowed_analytics: array<int, string>, route_prefix: string}
+     * @return array{
+     *     max_analytics: int,
+     *     allowed_analytics: array<int, string>,
+     *     route_prefix: string,
+     *     analytic_descriptions: array<string, string>,
+     * }
      *
      * @internal
      */
@@ -127,6 +157,7 @@ final class PanConfiguration
             'max_analytics' => $this->maxAnalytics,
             'allowed_analytics' => $this->allowedAnalytics,
             'route_prefix' => $this->routePrefix,
+            'analytic_descriptions' => $this->analyticDescriptions,
         ];
     }
 }
