@@ -8,3 +8,5 @@
 *.swp
 *.swo
 node_modules/
+.idea
+package-lock.json
