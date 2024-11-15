@@ -12,15 +12,16 @@ final readonly class Analytic
     /**
      * Returns all analytics.
      *
-     * @return array<int, Analytic>
+     * @return void
      */
     public function __construct(
-        public int $id,
+        public int    $id,
         public string $name,
-        public int $impressions,
-        public int $hovers,
-        public int $clicks,
-    ) {
+        public int    $impressions,
+        public int    $hovers,
+        public int    $clicks,
+    )
+    {
         //
     }
 
@@ -32,11 +33,11 @@ final readonly class Analytic
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
+            'id'          => $this->id,
+            'name'        => $this->name,
             'impressions' => $this->impressions,
-            'hovers' => $this->hovers,
-            'clicks' => $this->clicks,
+            'hovers'      => $this->hovers,
+            'clicks'      => $this->clicks,
         ];
     }
 }
