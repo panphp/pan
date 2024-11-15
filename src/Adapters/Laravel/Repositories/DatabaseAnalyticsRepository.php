@@ -31,15 +31,13 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     public function all(): array
     {
         /** @var array<int, Analytic> $all */
-        $all = DB::table('pan_analytics')->get()->map(fn (mixed $analytic): Analytic => new Analytic(
+        return DB::table('pan_analytics')->get()->map(fn (mixed $analytic): Analytic => new Analytic(
             id: (int) $analytic->id, // @phpstan-ignore-line
             name: $analytic->name, // @phpstan-ignore-line
             impressions: (int) $analytic->impressions, // @phpstan-ignore-line
             hovers: (int) $analytic->hovers, // @phpstan-ignore-line
             clicks: (int) $analytic->clicks, // @phpstan-ignore-line
         ))->toArray();
-
-        return $all;
     }
 
     /**
