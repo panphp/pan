@@ -20,7 +20,7 @@
         }
     ],
     "require": {
-        "php": "^8.3.0"
+        "php": "^8.2.0"
     },
     "conflict": {
         "laravel/framework": "<11.0.0"

@@ -32,7 +32,7 @@ Visualize your analytics is as simple as typing `php artisan pan` in your termin
 
 ## Get Started
 
-> **Requires [PHP 8.3+](https://php.net/releases/), and [Laravel 11.0+](https://laravel.com)**.
+> **Requires [PHP 8.2+](https://php.net/releases/), and [Laravel 11.0+](https://laravel.com)**.
 
 You may use [Composer](https://getcomposer.org) to require Pan into your PHP project:
 
