@@ -16,6 +16,7 @@ final readonly class Analytic
      */
     public function __construct(
         public int $id,
+        public string|int|null $tenant,
         public string $name,
         public int $impressions,
         public int $hovers,
@@ -27,12 +28,13 @@ final readonly class Analytic
     /**
      * Returns the analytic as an array.
      *
-     * @return array{id: int, name: string, impressions: int, hovers: int, clicks: int}
+     * @return array{id: int, tenant: string|int|null, name: string, impressions: int, hovers: int, clicks: int}
      */
     public function toArray(): array
     {
         return [
             'id' => $this->id,
+            'tenant' => $this->tenant,
             'name' => $this->name,
             'impressions' => $this->impressions,
             'hovers' => $this->hovers,

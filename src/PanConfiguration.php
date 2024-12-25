@@ -20,6 +20,8 @@ final class PanConfiguration
         private int $maxAnalytics = 50,
         private array $allowedAnalytics = [],
         private string $routePrefix = 'pan',
+        private ?string $tenantField = null,
+        private string|int|null $tenantId = null,
     ) {
         //
     }
@@ -67,6 +69,26 @@ final class PanConfiguration
     }
 
     /**
+     * Sets the tenant field to be used.
+     *
+     * @internal
+     */
+    public function setTenantField(?string $field): void
+    {
+        $this->tenantField = $field;
+    }
+
+    /**
+     * Sets the tenant ID to be used.
+     *
+     * @internal
+     */
+    public function setTenantId(string|int|null $id): void
+    {
+        $this->tenantId = $id;
+    }
+
+    /**
      * Sets the maximum number of analytics to store.
      */
     public static function maxAnalytics(int $number): void
@@ -103,6 +125,26 @@ final class PanConfiguration
     }
 
     /**
+     * Sets the tenant field to be used.
+     *
+     * @internal
+     */
+    public static function tenantField(?string $field): void
+    {
+        self::instance()->setTenantField($field);
+    }
+
+    /**
+     * Sets the tenant ID to be used.
+     *
+     * @internal
+     */
+    public static function tenantId(string|int|null $id): void
+    {
+        self::instance()->setTenantId($id);
+    }
+
+    /**
      * Resets the configuration to its default values.
      *
      * @internal
@@ -112,12 +154,20 @@ final class PanConfiguration
         self::maxAnalytics(50);
         self::allowedAnalytics([]);
         self::routePrefix('pan');
+        self::tenantField(null);
+        self::tenantId(null);
     }
 
     /**
      * Converts the Pan configuration to an array.
      *
-     * @return array{max_analytics: int, allowed_analytics: array<int, string>, route_prefix: string}
+     * @return array{
+     *     max_analytics: int,
+     *     allowed_analytics: array<int, string>,
+     *     route_prefix: string,
+     *     tenant_field: string|null,
+     *     tenant_id: string|int|null,
+     * }
      *
      * @internal
      */
@@ -127,6 +177,8 @@ final class PanConfiguration
             'max_analytics' => $this->maxAnalytics,
             'allowed_analytics' => $this->allowedAnalytics,
             'route_prefix' => $this->routePrefix,
+            'tenant_field' => $this->tenantField,
+            'tenant_id' => $this->tenantId,
         ];
     }
 }
