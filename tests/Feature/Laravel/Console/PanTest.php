@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Artisan;
 use Pan\Contracts\AnalyticsRepository;
 use Pan\Enums\EventType;
+use Pan\PanConfiguration;
 
 it('displays analytics even if they are empty', function (): void {
     $response = $this->artisan('pan');
@@ -45,6 +46,15 @@ it('displays filtered analytics', function (): void {
     $analytics->increment('profile', EventType::IMPRESSION);
 
     $exitCode = Artisan::call('pan --filter=profile');
+
+    expect($exitCode)->toBe(0);
+});
+
+it('displays tenant specific analytics', function (): void {
+    PanConfiguration::tenantField('team_id');
+    PanConfiguration::tenantId(1);
+
+    $exitCode = Artisan::call('pan --tenant=1');
 
     expect($exitCode)->toBe(0);
 });

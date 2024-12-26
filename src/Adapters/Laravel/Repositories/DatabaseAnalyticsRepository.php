@@ -30,13 +30,18 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
      */
     public function all(): array
     {
+        [
+            'tenant_field' => $tenantField,
+        ] = $this->config->toArray();
+
         /** @var array<int, Analytic> $all */
         $all = DB::table('pan_analytics')->get()->map(fn (mixed $analytic): Analytic => new Analytic(
-            id: (int) $analytic->id, // @phpstan-ignore-line
-            name: $analytic->name, // @phpstan-ignore-line
-            impressions: (int) $analytic->impressions, // @phpstan-ignore-line
-            hovers: (int) $analytic->hovers, // @phpstan-ignore-line
-            clicks: (int) $analytic->clicks, // @phpstan-ignore-line
+            id: (int) $analytic->id,
+            tenant: ($tenantField) ? $analytic->{$tenantField} : null,
+            name: $analytic->name,
+            impressions: (int) $analytic->impressions,
+            hovers: (int) $analytic->hovers,
+            clicks: (int) $analytic->clicks,
         ))->toArray();
 
         return $all;
@@ -50,21 +55,38 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
         [
             'allowed_analytics' => $allowedAnalytics,
             'max_analytics' => $maxAnalytics,
+            'tenant_field' => $tenantField,
+            'tenant_id' => $tenantId,
         ] = $this->config->toArray();
 
         if (count($allowedAnalytics) > 0 && ! in_array($name, $allowedAnalytics, true)) {
             return;
         }
 
-        if (DB::table('pan_analytics')->where('name', $name)->count() === 0) {
-            if (DB::table('pan_analytics')->count() < $maxAnalytics) {
-                DB::table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
+        // Restrict query to tenant if tenant field and id are set
+        $baseQuery = DB::table('pan_analytics');
+
+        if ($tenantField !== null && $tenantId !== null) {
+            $baseQuery->where($tenantField, $tenantId);
+        }
+
+        $fieldQuery = clone $baseQuery;
+        $fieldQuery = $fieldQuery->where('name', $name);
+
+        if ($fieldQuery->count() === 0) {
+            if ($baseQuery->count() < $maxAnalytics) {
+                $baseQuery->insert(array_filter([
+                    'name' => $name,
+                    $event->column() => 1,
+                    'tenant_field' => $tenantField,
+                    'tenant_id' => $tenantId,
+                ]));
             }
 
             return;
         }
 
-        DB::table('pan_analytics')->where('name', $name)->increment($event->column());
+        $fieldQuery->increment($event->column());
     }
 
     /**

@@ -20,7 +20,7 @@ final class PanCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'pan {--filter= : Filter the analytics by name}';
+    protected $signature = 'pan {--filter= : Filter the analytics by name} {--tenant= : Show only analytics for specific tenant}';
 
     /**
      * The console command description.
@@ -38,6 +38,11 @@ final class PanCommand extends Command
 
         if (is_string($filter = $this->option('filter'))) {
             $analytics = array_filter($analytics, fn (Analytic $analytic): bool => str_contains($analytic->name, $filter));
+        }
+
+        if (! empty($tenant = $this->option('tenant'))) {
+            $tenant = ctype_digit($tenant) ? (int) $tenant : $tenant;
+            $analytics = array_filter($analytics, fn (Analytic $analytic): bool => $analytic->tenant === $filter);
         }
 
         if ($analytics === []) {

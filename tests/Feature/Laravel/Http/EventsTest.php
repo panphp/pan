@@ -18,7 +18,7 @@ it('can create an analytic click event', function (): void {
     $analytics = array_map(fn (Analytic $analytic): array => $analytic->toArray(), app(AnalyticsRepository::class)->all());
 
     expect($analytics)->toBe([
-        ['id' => 1, 'name' => 'help-modal', 'impressions' => 0, 'hovers' => 0, 'clicks' => 1],
+        ['id' => 1, 'tenant' => null, 'name' => 'help-modal', 'impressions' => 0, 'hovers' => 0, 'clicks' => 1],
     ]);
 });
 
@@ -35,7 +35,7 @@ it('can create an analytic hover event', function (): void {
     $analytics = array_map(fn (Analytic $analytic): array => $analytic->toArray(), app(AnalyticsRepository::class)->all());
 
     expect($analytics)->toBe([
-        ['id' => 1, 'name' => 'help-modal', 'impressions' => 0, 'hovers' => 1, 'clicks' => 0],
+        ['id' => 1, 'tenant' => null, 'name' => 'help-modal', 'impressions' => 0, 'hovers' => 1, 'clicks' => 0],
     ]);
 });
 
@@ -52,7 +52,7 @@ it('can create an analytic impression event', function (): void {
     $analytics = array_map(fn (Analytic $analytic): array => $analytic->toArray(), app(AnalyticsRepository::class)->all());
 
     expect($analytics)->toBe([
-        ['id' => 1, 'name' => 'help-modal', 'impressions' => 1, 'hovers' => 0, 'clicks' => 0],
+        ['id' => 1, 'tenant' => null, 'name' => 'help-modal', 'impressions' => 1, 'hovers' => 0, 'clicks' => 0],
     ]);
 });
 
@@ -75,7 +75,7 @@ it('can create an analytic impression event and click event', function (): void 
     $analytics = array_map(fn (Analytic $analytic): array => $analytic->toArray(), app(AnalyticsRepository::class)->all());
 
     expect($analytics)->toBe([
-        ['id' => 1, 'name' => 'help-modal', 'impressions' => 1, 'hovers' => 0, 'clicks' => 1],
+        ['id' => 1, 'tenant' => null, 'name' => 'help-modal', 'impressions' => 1, 'hovers' => 0, 'clicks' => 1],
     ]);
 });
 
@@ -135,7 +135,7 @@ it('can create an event using a custom prefix url', function (): void {
     $analytics = array_map(fn (Analytic $analytic): array => $analytic->toArray(), app(AnalyticsRepository::class)->all());
 
     expect($analytics)->toBe([
-        ['id' => 1, 'name' => 'help-modal', 'impressions' => 1, 'hovers' => 0, 'clicks' => 0],
+        ['id' => 1, 'tenant' => null, 'name' => 'help-modal', 'impressions' => 1, 'hovers' => 0, 'clicks' => 0],
     ]);
 })->after(function (): void {
     PanConfiguration::routePrefix('pan');
