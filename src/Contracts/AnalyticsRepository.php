@@ -28,4 +28,9 @@ interface AnalyticsRepository
      * Flush all analytics.
      */
     public function flush(): void;
+
+    /**
+     * Export all analytics.
+     */
+    public function export(): void;
 }
