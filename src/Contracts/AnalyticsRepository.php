@@ -32,5 +32,5 @@ interface AnalyticsRepository
     /**
      * Export all analytics.
      */
-    public function export(): void;
+    public function export(): array;
 }
