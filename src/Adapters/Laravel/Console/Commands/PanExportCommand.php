@@ -32,14 +32,20 @@ final class PanExportCommand extends Command
     public function handle(AnalyticsRepository $analytics): void
     {
         $data = $analytics->export();
-        $fileName = 'pan_' . now()->format('Y-m-d_H-i-s') . '.csv';
+        $fileName = now()->format('Y-m-d_H-i-s').'.csv';
 
-        $handle = fopen('storage/app/pan'. $fileName, 'w');
+        $dir = storage_path('app/pan');
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $handle = fopen($dir.'/'.$fileName, 'w');
 
         fputcsv($handle, ['', 'Name', 'Impressions', 'Hovers', 'Clicks']);
 
         foreach($data as $row) {
-            fputcsv($handle, [$row['id'], $row['name'], $row['impressions'], $row['hovers'], $row['clicks']]);
+            fputcsv($handle, array_values($row->toArray()));
         }
 
         fclose($handle);
