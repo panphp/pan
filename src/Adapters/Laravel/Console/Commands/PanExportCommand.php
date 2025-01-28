@@ -39,7 +39,7 @@ final class PanExportCommand extends Command
             return;
         }
 
-        $fileName = now()->format('Y-m-d_H-i-s').'.csv';
+        $fileName = 'analytics_export_'.now()->format('Y-m-d_H-i-s').'.csv';
         $dir = storage_path('app/pan');
 
         if (! is_dir($dir)) {
