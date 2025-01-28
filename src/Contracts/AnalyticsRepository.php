@@ -31,7 +31,7 @@ interface AnalyticsRepository
 
     /**
      * Export all analytics.
-     * 
+     *
      * @return array<int, Analytic>
      */
     public function export(): array;
