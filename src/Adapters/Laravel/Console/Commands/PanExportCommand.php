@@ -33,23 +33,41 @@ final class PanExportCommand extends Command
     {
         $data = $analytics->export();
         $fileName = now()->format('Y-m-d_H-i-s').'.csv';
-
         $dir = storage_path('app/pan');
 
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             mkdir($dir, 0755, true);
+            $this->components->info('The directory storage/app/pan has been created.');
+        }
+
+        if (! is_dir($dir)) {
+            $this->components->error('The directory storage/app/pan does not exist and could not be created.');
+
+            return;
+        }
+
+        if (! is_writable($dir)) {
+            $this->components->error('The directory storage/app/pan is not writable.');
+
+            return;
         }
 
         $handle = fopen($dir.'/'.$fileName, 'w');
 
-        fputcsv($handle, ['', 'Name', 'Impressions', 'Hovers', 'Clicks']);
+        if ($handle === false) {
+            $this->components->error('The file storage/app/pan/'.$fileName.' could not be created.');
 
-        foreach($data as $row) {
-            fputcsv($handle, array_values($row->toArray()));
+            return;
+        }
+
+        fputcsv($handle, ['ID', 'Name', 'Impressions', 'Hovers', 'Clicks']);
+
+        foreach ($data as $row) {
+            fputcsv($handle, [$row->id, $row->name, $row->impressions, $row->hovers, $row->clicks]);
         }
 
         fclose($handle);
 
-        $this->components->info('All analytics have been exported to storage/app/pan/' . $fileName);
+        $this->components->info('All analytics have been exported to storage/app/pan/'.$fileName);
     }
 }
