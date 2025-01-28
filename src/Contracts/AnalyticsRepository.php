@@ -28,4 +28,11 @@ interface AnalyticsRepository
      * Flush all analytics.
      */
     public function flush(): void;
+
+    /**
+     * Export all analytics.
+     *
+     * @return array<int, Analytic>
+     */
+    public function export(): array;
 }

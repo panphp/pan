@@ -74,4 +74,20 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     {
         DB::table('pan_analytics')->truncate();
     }
+
+    /**
+     * Export all analytics.
+     */
+    public function export(): array
+    {
+        $all = DB::table('pan_analytics')->get()->map(fn (mixed $analytic): Analytic => new Analytic(
+            id: (int) $analytic->id, // @phpstan-ignore-line
+            name: $analytic->name, // @phpstan-ignore-line
+            impressions: (int) $analytic->impressions, // @phpstan-ignore-line
+            hovers: (int) $analytic->hovers, // @phpstan-ignore-line
+            clicks: (int) $analytic->clicks, // @phpstan-ignore-line
+        ))->toArray();
+
+        return $all;
+    }
 }
