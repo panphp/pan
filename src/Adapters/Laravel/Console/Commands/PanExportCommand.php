@@ -32,6 +32,13 @@ final class PanExportCommand extends Command
     public function handle(AnalyticsRepository $analytics): void
     {
         $data = $analytics->export();
+
+        if ($data === []) {
+            $this->components->info('There are no analytics to export.');
+
+            return;
+        }
+
         $fileName = now()->format('Y-m-d_H-i-s').'.csv';
         $dir = storage_path('app/pan');
 
