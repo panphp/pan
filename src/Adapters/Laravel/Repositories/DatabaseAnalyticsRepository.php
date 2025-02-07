@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Pan\Adapters\Laravel\Repositories;
 
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Connection;
+use Illuminate\Database\DatabaseManager;
 use Pan\Contracts\AnalyticsRepository;
 use Pan\Enums\EventType;
 use Pan\PanConfiguration;
@@ -18,10 +19,10 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     /**
      * Creates a new analytics repository instance.
      */
-    public function __construct(private PanConfiguration $config)
-    {
-        //
-    }
+    public function __construct(
+        private DatabaseManager $db,
+        private PanConfiguration $config
+    ) {}
 
     /**
      * Returns all analytics.
@@ -31,12 +32,12 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     public function all(): array
     {
         /** @var array<int, Analytic> $all */
-        $all = DB::table('pan_analytics')->get()->map(fn (mixed $analytic): Analytic => new Analytic(
-            id: (int) $analytic->id, // @phpstan-ignore-line
-            name: $analytic->name, // @phpstan-ignore-line
-            impressions: (int) $analytic->impressions, // @phpstan-ignore-line
-            hovers: (int) $analytic->hovers, // @phpstan-ignore-line
-            clicks: (int) $analytic->clicks, // @phpstan-ignore-line
+        $all = $this->connection()->table('pan_analytics')->get()->map(fn (mixed $analytic): Analytic => new Analytic(
+            id: (int) $analytic->id,
+            name: $analytic->name,
+            impressions: (int) $analytic->impressions,
+            hovers: (int) $analytic->hovers,
+            clicks: (int) $analytic->clicks,
         ))->toArray();
 
         return $all;
@@ -56,15 +57,15 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
             return;
         }
 
-        if (DB::table('pan_analytics')->where('name', $name)->count() === 0) {
-            if (DB::table('pan_analytics')->count() < $maxAnalytics) {
-                DB::table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
+        if ($this->connection()->table('pan_analytics')->where('name', $name)->count() === 0) {
+            if ($this->connection()->table('pan_analytics')->count() < $maxAnalytics) {
+                $this->connection()->table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
             }
 
             return;
         }
 
-        DB::table('pan_analytics')->where('name', $name)->increment($event->column());
+        $this->connection()->table('pan_analytics')->where('name', $name)->increment($event->column());
     }
 
     /**
@@ -72,6 +73,14 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
      */
     public function flush(): void
     {
-        DB::table('pan_analytics')->truncate();
+        $this->connection()->table('pan_analytics')->truncate();
+    }
+
+    /**
+     * Resolve the database connection.
+     */
+    private function connection(): Connection
+    {
+        return $this->db->connection($this->config->getDatabaseConnection());
     }
 }

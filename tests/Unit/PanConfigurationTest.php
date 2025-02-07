@@ -77,3 +77,9 @@ it('may reset the configuration to its default values', function (): void {
         'route_prefix' => 'pan',
     ]);
 });
+
+it('can set the database connection', function (): void {
+    PanConfiguration::databaseConnection('sqlite');
+
+    expect(PanConfiguration::instance()->getDatabaseConnection())->toBe('sqlite');
+});
