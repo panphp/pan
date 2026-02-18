@@ -33,7 +33,7 @@ final readonly class InjectJavascriptLibrary
         /** @var Response $response */
         $response = $next($request);
 
-        if ($response->headers->get('Content-Type') === 'text/html; charset=UTF-8') {
+        if (str_starts_with((string) $response->headers->get('Content-Type'), 'text/html')) {
             $content = (string) $response->getContent();
 
             if (! str_contains($content, '</html>') || ! str_contains($content, '</body>')) {

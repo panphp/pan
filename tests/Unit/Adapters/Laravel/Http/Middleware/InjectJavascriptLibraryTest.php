@@ -24,6 +24,28 @@ it('does inject the javascript library', function (): void {
         ->assertSee('_TEST_CSRF_TOKEN_');
 });
 
+it('does inject the javascript library with lowercase charset', function (): void {
+    Route::get('/', fn () => response(<<<'HTML'
+        <html lang="en">
+            <head>
+                <title>My App</title>
+            </head>
+            <body>
+                <h1>Welcome to my app</h1>
+            </body>
+        </html>
+        HTML
+    )->header('Content-Type', 'text/html; charset=utf-8'));
+
+    session()->put('_token', '_TEST_CSRF_TOKEN_');
+
+    $response = $this->get('/');
+
+    $response->assertOk()
+        ->assertSee('script')
+        ->assertSee('_TEST_CSRF_TOKEN_');
+});
+
 it('does not inject the javascript library if the content type is not text/html', function (): void {
     Route::get('/', fn () => response('Hello, World!')->header('Content-Type', 'text/plain'));
 

@@ -13,6 +13,7 @@ window.__pan =
         clickListener: null,
         mouseoverListener: null,
         inertiaStartListener: null,
+        livewireNavigatedListener: null,
     } as GlobalState);
 
 if (window.__pan.observer) {
@@ -40,6 +41,15 @@ if (window.__pan.inertiaStartListener) {
     );
 
     window.__pan.inertiaStartListener = null;
+}
+
+if (window.__pan.livewireNavigatedListener) {
+    document.removeEventListener(
+        "livewire:navigated",
+        window.__pan.livewireNavigatedListener
+    );
+
+    window.__pan.livewireNavigatedListener = null;
 }
 
 (function (): void {
@@ -197,6 +207,19 @@ if (window.__pan.inertiaStartListener) {
     document.addEventListener(
         "inertia:start",
         window.__pan.inertiaStartListener
+    );
+
+    window.__pan.livewireNavigatedListener = (): void => {
+        impressed = [];
+        hovered = [];
+        clicked = [];
+
+        detectImpressions();
+    };
+
+    document.addEventListener(
+        "livewire:navigated",
+        window.__pan.livewireNavigatedListener
     );
 
     window.__pan.beforeUnloadListener = function (event: Event): void {
