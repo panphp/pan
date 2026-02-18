@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pan\Adapters\Laravel\Providers;
 
 use Illuminate\Contracts\Http\Kernel as HttpContract;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Pan\Adapters\Laravel\Console\Commands\InstallPanCommand;
@@ -35,6 +36,7 @@ final class PanServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->registerBladeDirectives();
         $this->registerCommands();
         $this->registerRoutes();
         $this->registerPublishing();
@@ -72,6 +74,14 @@ final class PanServiceProvider extends ServiceProvider
         Route::prefix($config->toArray()['route_prefix'])->group(function (): void {
             Route::post('/events', [EventController::class, 'store']);
         });
+    }
+
+    /**
+     * Register the package's Blade directives.
+     */
+    private function registerBladeDirectives(): void
+    {
+        Blade::directive('pan', fn (string $expression): string => "data-pan=\"<?php echo e({$expression}); ?>\"");
     }
 
     /**

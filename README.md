@@ -57,8 +57,24 @@ Finally, you may start tracking your pages or components adding the `data-pan` a
 </div>
 ```
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 > Event names must only contain letters, numbers, dashes, and underscores.
+
+### Using the `@pan` Blade directive
+
+For a cleaner syntax in your Blade templates, you may use the `@pan` directive instead of writing the `data-pan` attribute manually:
+
+```blade
+<button @pan('tab-1')>Tab 1</button>
+<button @pan('tab-2')>Tab 2</button>
+```
+
+The directive also supports variables and expressions:
+
+```blade
+<button @pan('tab-' . $tab->slug)>{{ $tab->name }}</button>
+<button @pan($analyticsName)>Click me</button>
+```
 
 ## Visualize your product analytics
 
