@@ -19,14 +19,14 @@ if (exports.window.__pan.clickListener) {
 if (exports.window.__pan.mouseoverListener) {
     document.removeEventListener(
         "mouseover",
-        exports.window.__pan.mouseoverListener
+        exports.window.__pan.mouseoverListener,
     );
     exports.window.__pan.mouseoverListener = null;
 }
 if (exports.window.__pan.inertiaStartListener) {
     document.removeEventListener(
         "inertia:start",
-        exports.window.__pan.inertiaStartListener
+        exports.window.__pan.inertiaStartListener,
     );
     exports.window.__pan.inertiaStartListener = null;
 }
@@ -62,8 +62,8 @@ if (exports.window.__pan.inertiaStartListener) {
                 ],
                 {
                     type: "application/json",
-                }
-            )
+                },
+            ),
         );
     };
     var queueCommit = function () {
@@ -126,7 +126,7 @@ if (exports.window.__pan.inertiaStartListener) {
     domObserver(function () {
         impressed.forEach(function (name) {
             var element = document.querySelector(
-                "[data-pan='".concat(name, "']")
+                "[data-pan='".concat(name, "']"),
             );
             if (element === null) {
                 impressed = impressed.filter(function (n) {
@@ -151,7 +151,7 @@ if (exports.window.__pan.inertiaStartListener) {
     };
     document.addEventListener(
         "mouseover",
-        exports.window.__pan.mouseoverListener
+        exports.window.__pan.mouseoverListener,
     );
     exports.window.__pan.inertiaStartListener = function (event) {
         impressed = [];
@@ -161,7 +161,7 @@ if (exports.window.__pan.inertiaStartListener) {
     };
     document.addEventListener(
         "inertia:start",
-        exports.window.__pan.inertiaStartListener
+        exports.window.__pan.inertiaStartListener,
     );
     exports.window.__pan.beforeUnloadListener = function (event) {
         if (queue.length === 0) {
@@ -171,6 +171,6 @@ if (exports.window.__pan.inertiaStartListener) {
     };
     exports.window.addEventListener(
         "beforeunload",
-        exports.window.__pan.beforeUnloadListener
+        exports.window.__pan.beforeUnloadListener,
     );
 })();
