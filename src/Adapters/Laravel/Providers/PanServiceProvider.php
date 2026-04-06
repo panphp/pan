@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pan\Adapters\Laravel\Providers;
 
 use Illuminate\Contracts\Http\Kernel as HttpContract;
+use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Pan\Adapters\Laravel\Console\Commands\InstallPanCommand;
@@ -45,7 +46,7 @@ final class PanServiceProvider extends ServiceProvider
      */
     private function registerConfiguration(): void
     {
-        $this->app->bind(PanConfiguration::class, fn (): \Pan\PanConfiguration => PanConfiguration::instance());
+        $this->app->bind(PanConfiguration::class, fn (): PanConfiguration => PanConfiguration::instance());
     }
 
     /**
@@ -61,7 +62,7 @@ final class PanServiceProvider extends ServiceProvider
      */
     private function registerRoutes(): void
     {
-        /** @var \Illuminate\Foundation\Http\Kernel $kernel */
+        /** @var Kernel $kernel */
         $kernel = $this->app->make(HttpContract::class);
 
         $kernel->pushMiddleware(InjectJavascriptLibrary::class);
