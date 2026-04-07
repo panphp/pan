@@ -57,15 +57,17 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
             return;
         }
 
-        if ($this->connection()->table('pan_analytics')->where('name', $name)->count() === 0) {
-            if ($this->connection()->table('pan_analytics')->count() < $maxAnalytics) {
-                $this->connection()->table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
+        $connection = $this->connection();
+
+        if ($connection->table('pan_analytics')->where('name', $name)->count() === 0) {
+            if ($connection->table('pan_analytics')->count() < $maxAnalytics) {
+                $connection->table('pan_analytics')->insert(['name' => $name, $event->column() => 1]);
             }
 
             return;
         }
 
-        $this->connection()->table('pan_analytics')->where('name', $name)->increment($event->column());
+        $connection->table('pan_analytics')->where('name', $name)->increment($event->column());
     }
 
     /**
