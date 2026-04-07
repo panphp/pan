@@ -31,7 +31,7 @@ final class PanDeleteCommand extends Command
         $id = (int) $this->argument('id');
 
         if ($this->isInvalidId($id)) {
-            $this->error('Analytic ID must be greater than 0.');
+            $this->error('Invalid ID provided.');
 
             return;
         }

@@ -1,38 +1,36 @@
 <?php
 
 use Pan\Contracts\AnalyticsRepository;
-
-beforeEach(function (): void {
-    $this->repository = mock(AnalyticsRepository::class)->makePartial();
-    app()->instance(AnalyticsRepository::class, $this->repository);
-});
+use Pan\Enums\EventType;
+use Symfony\Component\Console\Exception\RuntimeException;
 
 it('deletes a specific analytic by ID', function (): void {
-    $this->repository
-        ->expects('delete')
-        ->with(1)
-        ->once()
-        ->andReturn(1);
+    $analytics = app(AnalyticsRepository::class);
 
-    $this->artisan('pan:delete', ['id' => 1])
+    $analytics->increment('dashboard', EventType::IMPRESSION);
+
+    $id = $analytics->all()[0]->id;
+
+    $this->artisan('pan:delete', ['id' => $id])
         ->expectsOutput('Analytic has been deleted.')
         ->assertExitCode(0);
+
+    expect($analytics->all())->toHaveCount(0);
 });
 
 it('fails when no argument is provided', function (): void {
-    $this->artisan('pan:delete')
-        ->expectsOutput('Not enough arguments (missing: "id").')
-        ->assertExitCode(1);
+    expect(fn () => $this->artisan('pan:delete')->run())
+        ->toThrow(RuntimeException::class, 'Not enough arguments (missing: "id").');
 });
 
 it('handles non-existent analytic gracefully', function (): void {
-    $this->repository
-        ->expects('delete')
-        ->with(26)
-        ->once()
-        ->andReturn(0);
-
-    $this->artisan('pan:delete', ['id' => 26])
+    $this->artisan('pan:delete', ['id' => 9999])
         ->expectsOutput('Record not found or already deleted.')
+        ->assertExitCode(0);
+});
+
+it('handles invalid ID gracefully', function (): void {
+    $this->artisan('pan:delete', ['id' => 'invalid'])
+        ->expectsOutput('Invalid ID provided.')
         ->assertExitCode(0);
 });
