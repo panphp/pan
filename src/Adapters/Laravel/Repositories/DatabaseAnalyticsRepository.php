@@ -20,7 +20,7 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
      * Creates a new analytics repository instance.
      */
     public function __construct(
-        private DatabaseManager $db,
+        private DatabaseManager $databaseManager,
         private PanConfiguration $config
     ) {}
 
@@ -81,6 +81,6 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
      */
     private function connection(): Connection
     {
-        return $this->db->connection($this->config->getDatabaseConnection());
+        return $this->databaseManager->connection($this->config->getDatabaseConnection());
     }
 }
