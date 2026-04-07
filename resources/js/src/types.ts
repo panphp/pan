@@ -7,5 +7,6 @@ export type GlobalState = {
     clickListener: EventListener | null;
     mouseoverListener: EventListener | null;
     inertiaStartListener: EventListener | null;
+    livewireNavigatedListener: EventListener | null;
     beforeUnloadListener: EventListener | null;
 };
