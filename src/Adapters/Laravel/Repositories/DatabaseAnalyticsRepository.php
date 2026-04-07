@@ -85,4 +85,12 @@ final readonly class DatabaseAnalyticsRepository implements AnalyticsRepository
     {
         return $this->databaseManager->connection($this->config->getDatabaseConnection());
     }
+
+    /**
+     * Delete a specific analytic by ID.
+     */
+    public function delete(int $id): int
+    {
+        return DB::table('pan_analytics')->where('id', $id)->delete();
+    }
 }
