@@ -139,6 +139,14 @@ To flush your product analytics, you may use the `pan:flush` Artisan command:
 php artisan pan:flush
 ```
 
+## Delete an analytic
+
+To delete a specific analytic record by its ID, use the `pan:delete` Artisan command:
+
+```bash
+php artisan pan:delete <id>
+```
+
 ## How does it work?
 
 Via middleware, Pan injects a simple JavaScript library into your HTML pages. This library listens to events like `viewed`, `clicked`, or `hovered` and sends the data to your Laravel application. Note that this library does not collect any personal information; such as IP addresses, user agents, or any information that could be used to identify a user.
