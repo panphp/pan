@@ -60,6 +60,28 @@ Finally, you may start tracking your pages or components adding the `data-pan` a
 > [!IMPORTANT]  
 > Event names must only contain letters, numbers, dashes, and underscores.
 
+## Filament integration
+
+Pan works seamlessly with [Filament](https://filamentphp.com). You can track any Filament action by passing the `data-pan` attribute via `extraAttributes`:
+
+```php
+Action::make('subscribe')
+    ->extraAttributes(['data-pan' => 'subscribe-button'])
+```
+
+To track **all actions globally**, add the following to a service provider's `boot` method:
+
+```php
+use Filament\Actions\Action;
+
+public function boot(): void
+{
+    Action::configureUsing(function (Action $action): void {
+        $action->extraAttributes(fn () => ['data-pan' => $action->getLabel()]);
+    });
+}
+```
+
 ## Visualize your product analytics
 
 To visualize your product analytics, you may use the `pan` Artisan command:
