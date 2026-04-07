@@ -20,6 +20,7 @@ final class PanConfiguration
         private int $maxAnalytics = 50,
         private array $allowedAnalytics = [],
         private string $routePrefix = 'pan',
+        private ?string $databaseConnection = null,
     ) {
         //
     }
@@ -64,6 +65,24 @@ final class PanConfiguration
     public function setRoutePrefix(string $prefix): void
     {
         $this->routePrefix = $prefix;
+    }
+
+    /**
+     * Sets the database connection to be used.
+     *
+     * @internal
+     */
+    public function setDatabaseConnection(string $connection): void
+    {
+        $this->databaseConnection = $connection;
+    }
+
+    /**
+     * Sets the database connection to be used.
+     */
+    public static function databaseConnection(string $connection): void
+    {
+        self::instance()->setDatabaseConnection($connection);
     }
 
     /**
@@ -128,5 +147,15 @@ final class PanConfiguration
             'allowed_analytics' => $this->allowedAnalytics,
             'route_prefix' => $this->routePrefix,
         ];
+    }
+
+    /**
+     * Get the database connection to be used.
+     *
+     * @internal
+     */
+    public function getDatabaseConnection(): ?string
+    {
+        return $this->databaseConnection;
     }
 }
