@@ -36,7 +36,7 @@ if (window.__pan.mouseoverListener) {
 if (window.__pan.inertiaStartListener) {
     document.removeEventListener(
         "inertia:start",
-        window.__pan.inertiaStartListener
+        window.__pan.inertiaStartListener,
     );
 
     window.__pan.inertiaStartListener = null;
@@ -60,6 +60,7 @@ if (window.__pan.inertiaStartListener) {
     let impressed: Array<string> = [];
     let hovered: Array<string> = [];
     let clicked: Array<string> = [];
+    let sameNameElements: Array<string> = [];
 
     const commit = (): void => {
         if (queue.length === 0) {
@@ -81,8 +82,8 @@ if (window.__pan.inertiaStartListener) {
                 ],
                 {
                     type: "application/json",
-                }
-            )
+                },
+            ),
         );
     };
 
@@ -148,6 +149,16 @@ if (window.__pan.inertiaStartListener) {
                 return;
             }
 
+            let nameElements = document.querySelectorAll(
+                `[data-pan='${name}']`,
+            );
+            if (nameElements.length > 1 && !sameNameElements.includes(name)) {
+                console.warn(
+                    `PAN: Multiple (${nameElements.length}) elements with the same name '${name}' found`,
+                );
+                sameNameElements.push(name);
+            }
+
             if (impressed.includes(name)) {
                 return;
             }
@@ -169,7 +180,7 @@ if (window.__pan.inertiaStartListener) {
 
             if (element === null) {
                 impressed = impressed.filter(
-                    (n: string): boolean => n !== name
+                    (n: string): boolean => n !== name,
                 );
                 hovered = hovered.filter((n: string): boolean => n !== name);
                 clicked = clicked.filter((n: string): boolean => n !== name);
@@ -196,7 +207,7 @@ if (window.__pan.inertiaStartListener) {
 
     document.addEventListener(
         "inertia:start",
-        window.__pan.inertiaStartListener
+        window.__pan.inertiaStartListener,
     );
 
     window.__pan.beforeUnloadListener = function (event: Event): void {
