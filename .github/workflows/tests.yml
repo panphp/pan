@@ -11,6 +11,10 @@ jobs:
         os: [ubuntu-latest]
         php: ["8.3"]
         dependency-version: [prefer-lowest, prefer-stable]
+        include:
+          - os: ubuntu-latest
+            php: "8.6"
+            dependency-version: prefer-stable
 
     name: Tests P${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
 
@@ -36,6 +40,14 @@ jobs:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: dependencies-php-${{ matrix.php }}-os-${{ matrix.os }}-version-${{ matrix.dependency-version }}-composer-${{ hashFiles('composer.json') }}
           restore-keys: dependencies-php-${{ matrix.php }}-os-${{ matrix.os }}-version-${{ matrix.dependency-version }}-composer-
+
+      - name: Use Laravel 13 tooling on PHP 8.6
+        if: matrix.php == '8.6'
+        run: >-
+          composer require --dev --no-update --no-interaction
+          "laravel/framework:~13.44" "orchestra/testbench:~11.0"
+          "pestphp/pest:~5.3" "pestphp/pest-plugin-type-coverage:~5.1"
+          "phpstan/phpstan:~2.3" "rector/rector:~2.0"
 
       - name: Install Composer dependencies
         run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
